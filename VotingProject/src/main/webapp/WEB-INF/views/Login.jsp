@@ -21,6 +21,7 @@ input {
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 14px;
+    height:25px;
 }
 
 /* 버튼 효과 */
@@ -52,7 +53,7 @@ input {
 </tr>
 </table>
 <br>
-<button class="btn log" onclick="self.close()">회원가입</button>&nbsp;&nbsp;
-<button class="btn log" onclick="location.href='/project/MainPage.jsp'">로그인</button>
+<button class="btn log" onclick="location.href='/VotingProject/CreateID.jsp'">회원가입</button>&nbsp;&nbsp;
+<button class="btn log" onclick="location.href='/VotingProject/MainPage.jsp'">로그인</button>
 </body>
 </html>

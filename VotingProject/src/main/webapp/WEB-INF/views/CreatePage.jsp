@@ -28,7 +28,7 @@ input, textarea{
 .btn {
     border: none;
     color: white;
-    padding: 10px 100px;
+    padding: 10px 120px;
     font-size: 16px;
     cursor: pointer;
 }
@@ -43,7 +43,7 @@ input, textarea{
 <br>
 <table>
 <tr>
-<td><h4>Title :&nbsp;&nbsp;</h4></td><td><input type="text" name="title" placeholder="투표 제목 입력" required/></td>
+<td><h4>Title :&nbsp;&nbsp;</h4></td><td><input type="text" name="title" style="height: 25px;" placeholder="투표 제목 입력" required/></td>
 </tr>
 <tr>
 <td rowspan="2"><h4>Contents :&nbsp;&nbsp;</h4></td>
@@ -53,13 +53,13 @@ input, textarea{
 </tr>
 <tr>
 <td rowspan="4"><h4>Choices :&nbsp;&nbsp;</h4></td>
-<td><input type="text" name="title" width="30px" placeholder=" 1. 첫 번째 답변 입력"/></td>
+<td><input type="text" name="title" style="height: 25px;" placeholder=" 1. 첫 번째 답변 입력"/></td>
 </tr><tr>
-<td><input type="text" name="title" width="30px" placeholder=" 2. 두 번째 답변 입력"/></td>
+<td><input type="text" name="title" style="height: 25px;" placeholder=" 2. 두 번째 답변 입력"/></td>
 </tr><tr>
-<td><input type="text" name="title" width="30px" placeholder=" 3. 세 번째 답변 입력"/></td>
+<td><input type="text" name="title" style="height: 25px;" placeholder=" 3. 세 번째 답변 입력"/></td>
 </tr><tr>
-<td><input type="text" name="title" width="30px" placeholder=" 4. 네 번째 답변 입력"/></td>
+<td><input type="text" name="title" style="height: 25px;" placeholder=" 4. 네 번째 답변 입력"/></td>
 </tr>
 </table>
 <br>
