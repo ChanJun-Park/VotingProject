@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -141,6 +142,14 @@ width:35%;
 height:45px;
 }
 .log:hover {background: #e68a00;}
+
+.participate {
+	background-color: #b5b5b5;
+	width:35%;
+	height:45px;
+}
+.participate:hover {background: #858585;}
+
 .box{
 	text-align:center;
 }
@@ -196,8 +205,8 @@ height:45px;
 <tr>
 <td class="td1"><input type="text" name="search" placeholder="Search.."></td>
 <td class="td2"><h1><b>VOTE</b></h1></td>
-<td class="td3"><a href="/VotingProject/CreatePage.jsp"><img src="/VotingProject/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
-<a href="/VotingProject/Mypage.jsp"><img src="/VotingProject/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></a></td></tr>
+<td class="td3"><a href="/VotingProject/CreatePage.jsp"><img src="/voting/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
+<a href="/voting/Mypage.jsp"><img src="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></a></td></tr>
 <tr><td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td></tr>
 </table>
 </header>
@@ -210,101 +219,51 @@ height:45px;
   
     <div class="numbertext">1 / 3</div>
 
-    <article class="new_vote">
-    <br>
-    <h2 class="q">오늘 점심 투표해주세요..</h2>
-    <div class="box"><input class="btn log" type=button value="짜장면" /><input class="btn log" type=button value="짬뽕"/></div>
-    <div class="box"><input class="btn log" type=button value="마라탕" /><input class="btn log" type=button value="볶음밥"/></div>
-    <div class="box_ex">
-    <img class="btn_good" src="/VotingProject/resources/images/Like.jpg">
-    <img class="btn_star" src="/VotingProject/resources/images/Star.png">
-    <img class="btn_comment" src="/VotingProject/resources/images/Comment.png" id="btn_comment" >
-    </div>
-    <!-- 댓글 창 -->
-    <div id="comment" class="contentPOP">
-    <div class="comment-content">
-    	<span class="close">&times;</span>
-    	<input type="text" placeholder=" 댓글을 입력해주세요" style="width:75%;height:30px;">&nbsp;&nbsp;
-    	<input class="btn log" type=button value="추가" style="background-color:gray;width:15%;" />
-    	<br>
-    	<br>
-    	<hr>
-    	<p><span style="font-size:16px;font-weight: bold;padding-bottom: 10px;">홍길동</span><br>
-    	배고푸다;<br>
-    	<span style="color:gray;font-size:10px;">2020.08.22</span></p>
-    	<hr>
-    	<p><span style="font-size:16px;font-weight: bold;padding-bottom:10px;">김길동</span><br>
-    	짜장면 시키신 분~<br>
-    	<span style="color:gray;font-size:10px;">2020.08.22</span></p>
-    	<hr>
-    </div>
-    </div>
-    </article>
-    
-    <article class="new_vote">
-    <br>
-    <h2 class="q">오늘 점심 투표해주세요..</h2>
-    <div class="box"><input class="btn log" type=button value="짜장면" /><input class="btn log" type=button value="짬뽕"/></div>
-    <div class="box"><input class="btn log" type=button value="마라탕" /><input class="btn log" type=button value="볶음밥"/></div>
-    <div class="box_ex">
-    <img class="btn_good" src="/VotingProject/resources/images/Like.jpg">
-    <img class="btn_star" src="/VotingProject/resources/images/Star.png">
-    <img class="btn_comment" src="/VotingProject/resources/images/Comment.png" id="btn_comment" >
-    </div>
-    <!-- 댓글 창 -->
-    <div id="comment" class="contentPOP">
-    <div class="comment-content">
-    	<span class="close">&times;</span>
-    	<input type="text" placeholder=" 댓글을 입력해주세요" style="width:75%;height:30px;">&nbsp;&nbsp;
-    	<input class="btn log" type=button value="추가" style="background-color:gray;width:15%;" />
-    	<br>
-    	<br>
-    	<hr>
-    	<p><span style="font-size:15px;font-weight: bold;padding-bottom: 5px;">홍길동</span><br>
-    	배고푸다;<br>
-    	<span style="color:gray;font-size:10px">2020.08.22</span></p>
-    	<hr>
-    	<p><span style="font-size:15px;font-weight: bold;padding-bottom: 5px;">김길동</span><br>
-    	짜장면 시키신 분~<br>
-    	<span style="color:gray;font-size:10px">2020.08.22</span></p>
-    	<hr>
-    </div>
-    </div>
-    </article>
-    
-    <article class="new_vote">
-    <br>
-    <h2 class="q">오늘 점심 투표해주세요..</h2>
-    <div class="box"><input class="btn log" type=button value="짜장면" /><input class="btn log" type=button value="짬뽕"/></div>
-    <div class="box"><input class="btn log" type=button value="마라탕" /><input class="btn log" type=button value="볶음밥"/></div>
-    <div class="box_ex">
-    <img class="btn_good" src="/VotingProject/resources/images/Like.jpg">
-    <img class="btn_star" src="/VotingProject/resources/images/Star.png">
-    <img class="btn_comment" src="/VotingProject/resources/images/Comment.png" id="btn_comment" >
-    </div>
-    <!-- 댓글 창 -->
-    <div id="comment" class="contentPOP">
-    <div class="comment-content">
-    	<span class="close">&times;</span>
-    	<input type="text" placeholder=" 댓글을 입력해주세요" style="width:75%;height:30px;">&nbsp;&nbsp;
-    	<input class="btn log" type=button value="추가" style="background-color:gray;width:15%;" />
-    	<br>
-    	<br>
-    	<hr>
-    	<p><span style="font-size:15px;font-weight: bold;padding-bottom: 5px;">홍길동</span><br>
-    	배고푸다;<br>
-    	<span style="color:gray;font-size:10px">2020.08.22</span></p>
-    	<hr>
-    	<p><span style="font-size:15px;font-weight: bold;padding-bottom: 5px;">김길동</span><br>
-    	짜장면 시키신 분~<br>
-    	<span style="color:gray;font-size:10px">2020.08.22</span></p>
-    	<hr>
-    </div>
-    </div>
-    </article>
-      
-  </div>
-  
+	<c:forEach var="voteVO" items="${votes }">
+	    <article class="new_vote" id="vote${voteVO.vote_id }">
+		    <br>
+		    <h2 class="q">${voteVO.title }</h2>
+		    <p class="q">${voteVO.contents }</p>
+		    <c:forEach var="pickVO" items="${voteVO.pickList }">
+		    	<div class="box">
+		    		<input class="btn log" type=button value="${pickVO.pickName }" />
+		    	</div>	
+		    </c:forEach>
+		    
+		    <div class="box">
+		    	<input class="btn participate" type=button value="참여하기" />
+		    </div>
+		    
+		    <div class="box_ex">
+    		    <input type="hidden" name="vote_id" value="${voteVO.vote_id }"/>
+			    <img class="btn_good" src="/voting/resources/images/Like.jpg">${voteVO.like_count }
+			    <img class="btn_star" src="/voting/resources/images/Star.png">
+			    <img class="btn_comment" src="/voting/resources/images/Comment.png">${voteVO.comment_count }
+		    </div>
+		    
+		    <!-- 댓글 창 -->
+		    <div class="comment contentPOP">
+			    <div class="comment-content">
+			    	<span class="close">&times;</span>
+			    	<input type="text" placeholder=" 댓글을 입력해주세요" style="width:75%;height:30px;">&nbsp;&nbsp;
+			    	<input class="btn log" type=button value="추가" style="background-color:gray;width:15%;" />
+			    	<br>
+			    	<br>
+			    	<div id="comment-list">
+			    		<hr>
+				    	<p><span style="font-size:16px;font-weight: bold;padding-bottom: 10px;">홍길동</span><br>
+				    	배고푸다;<br>
+				    	<span style="color:gray;font-size:10px;">2020.08.22</span></p>
+				    	<hr>
+				    	<p><span style="font-size:16px;font-weight: bold;padding-bottom:10px;">김길동</span><br>
+				    	짜장면 시키신 분~<br>
+				    	<span style="color:gray;font-size:10px;">2020.08.22</span></p>
+				    	<hr>
+			    	</div>
+			    </div>
+		    </div>
+	    </article>
+	</c:forEach>
   
   <div class="mySlides fade">
     <div class="numbertext">2 / 3</div>
@@ -348,6 +307,8 @@ height:45px;
 <br>
 <br>
 </section>
+<!-- jQuery 인클루드 -->
+<script src="/voting/resources/jquery-3.2.1.min.js"></script>
 <!-- 페이지 넘기기 -->
 <script>
 var slideIndex = 1;
@@ -377,17 +338,46 @@ var com = document.getElementById("comment");
 var btn = document.getElementById("btn_comment");
 var x_btn = document.getElementsByClassName("close")[0];
 
-btn.onclick = function() {
-	com.style.display="block";
-}
-x_btn.onclick = function(){
-	com.style.display="none";
-}
-window.onclick = function(event) {
-    if (event.target == com) {
-        com.style.display = "none";
-    }
-}
+$(".btn_comment").on("click", function() {
+	$(this).parent().next().css({"display":"block"});
+	
+	var vote_id = $(this).prev().prev().prev().val();
+	// 투표와 관련된 댓글 리스트 불러오기dd
+});
+
+$(".comment").on("click", ".close", function() {
+	$(this).parent().parent().css({"display":"none"});
+});
+
+$(".btn_good").on("click", function() {
+	var vote_id = $(this).prev().val();
+	// 투표 좋아요 카운트 증가
+	// 투표에 좋아요 증가
+// 	$.ajax({
+// 		url : '/voting/likevote',
+// 		data : {'seq':'1'},
+// 		type : 'post',
+// 		dataType : 'json',
+// 		success : function(serverdata) {
+// 			$("#result").html(serverdata.seq + ":" + serverdata.title + ":" + serverdata.contents);
+// 		}
+// 		error : function() {
+				
+// 		}, 
+// 		complete : function() {
+				
+// 		}
+	});// ajax end
+});
+
+// x_btn.onclick = function(){
+// 	com.style.display="none";
+// }
+// window.onclick = function(event) {
+//     if (event.target == com) {
+//         com.style.display = "none";
+//     }
+// }
 </script>
 
 </body>
