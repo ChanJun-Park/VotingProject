@@ -21,6 +21,7 @@ table{
 tr td:first-child{
 	text-align: left;
 	font-weight: bold;
+	width:70%;
 }
 
 /* 버튼 효과 */
@@ -32,7 +33,7 @@ tr td:first-child{
     cursor: pointer;
 }
 #upd,#del{
-    width:80px;
+    width:70px;
     margin-top:10px;
 }
 .log {background-color: #ff9800;}
@@ -43,14 +44,16 @@ tr td:first-child{
 </head>
 <body>
 
+
 <hr>
 <table>
 <tr>
 <td>오늘 점심투표해주세요..
 </td>
 <td style="align-content:  center;">
-<button id="upd" class="btn log" onclick="" >수정</button>&nbsp;
-<button id="del" class="btn log" onclick="" >삭제</button>
+<form action="/voting/deletevote" method="get">
+<input type=button id="del" class="btn log" value="삭제"/>
+</form>
 </td>
 </tr>
 </table>
@@ -63,7 +66,6 @@ tr td:first-child{
 <td>오늘 점심투표해주세요..
 </td>
 <td>
-<button id="upd" class="btn log" onclick="">수정</button>&nbsp;
 <button id="del" class="btn log" onclick="">삭제</button>
 </td>
 </tr>
