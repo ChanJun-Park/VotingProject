@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
- <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -186,21 +185,6 @@ height:45px;
 
 </style>
 <title>메인 페이지</title>
-<script src="/voting/resources/jquery-3.2.1.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	$("#add_btn").on('click',function(){
-		$.ajax({
-			url : '/voting/comments',
-			type : 'post',	
-			
-			success : function(serverdata){
-				$("$result").html(serverdata)
-			}
-		});//ajax end
-	});//on end
-});//ready end
-</script>
 </head>
 <body>
 
@@ -238,40 +222,24 @@ $(document).ready(function(){
     </div>
     <!-- 댓글 창 -->
     <div id="comment" class="contentPOP">
-	    <div class="comment-content">
-		    <span class="close">&times;</span>
-			<form action="/voting/commentwrite" method="post">
-		    <input id="contents" type="text" placeholder=" 댓글을 입력해주세요" style="width:75%;height:30px;">&nbsp;&nbsp;
-		    <input id="add_btn" class="btn log" type=submit value="추가" style="background-color:gray;width:15%;" />
-			</form>		    
-		    <br>
-		    <br>
-		    <hr>
-		    <c:forEach items="${commentlist }" var="vo">
-		    	<p><span style="font-size:16px;font-weight: bold;padding-bottom: 10px;">${vo.writer_id }</span><br>
-		    	${vo.contents }<br>	
-		    	<span style="color:gray;font-size:10px;">${vo.time }</span></p>
-		    	<hr>
-		    </c:forEach>
-		    
-	    </div>
+    <div class="comment-content">
+    	<span class="close">&times;</span>
+    	<input type="text" placeholder=" 댓글을 입력해주세요" style="width:75%;height:30px;">&nbsp;&nbsp;
+    	<input class="btn log" type=button value="추가" style="background-color:gray;width:15%;" />
+    	<br>
+    	<br>
+    	<hr>
+    	<p><span style="font-size:16px;font-weight: bold;padding-bottom: 10px;">홍길동</span><br>
+    	배고푸다;<br>
+    	<span style="color:gray;font-size:10px;">2020.08.22</span></p>
+    	<hr>
+    	<p><span style="font-size:16px;font-weight: bold;padding-bottom:10px;">김길동</span><br>
+    	짜장면 시키신 분~<br>
+    	<span style="color:gray;font-size:10px;">2020.08.22</span></p>
+    	<hr>
+    </div>
     </div>
     </article>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     <article class="new_vote">
     <br>
