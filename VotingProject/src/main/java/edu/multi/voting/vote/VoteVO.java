@@ -3,6 +3,10 @@ package edu.multi.voting.vote;
 import java.sql.Date;
 
 import org.springframework.stereotype.Repository;
+import java.util.ArrayList;
+
+import edu.multi.voting.pick.PickVO;
+
 @Repository("vo")
 public class VoteVO {
 	int vote_id;
