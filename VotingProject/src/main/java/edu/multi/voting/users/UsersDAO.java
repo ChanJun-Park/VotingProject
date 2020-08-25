@@ -37,12 +37,32 @@ public class UsersDAO {
 			}
 	}
 	
+	//delete by userVO
 	public void deleteUser(UsersVO user) {
-		
+		try {
+
+				String sql = "delete from users where user_id=?"; 
+				//prepared statement
+
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con = DriverManager.getConnection(
+						"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+				pt.setString(1, user.getUser_id());
+				pt.executeUpdate();
+
+
+				pt.close();
+				con.close();
+				
+				}catch(Exception e) {
+					e.printStackTrace();
+				}
+
 		
 	}
 	
-	//id pwÀÏÄ¡Ã¼Å©
+	//id pwï¿½ï¿½Ä¡Ã¼Å©
 	public UsersVO validcheck(String user_id,String password) {
 		UsersVO vo=new UsersVO();
 	try {
@@ -76,7 +96,7 @@ public class UsersDAO {
 	}
 
 	
-	//Áßº¹Ã¼Å©
+	//ï¿½ßºï¿½Ã¼Å©
 	public String dupcheck(String user_id) {
 		String check ="";
 		try {
@@ -98,7 +118,7 @@ public class UsersDAO {
 				else {
 					check = "YES";
 				}
-				System.out.println("Áßº¹Ã¼Å©: "+check);
+				System.out.println("ï¿½ßºï¿½Ã¼Å©: "+check);
 			
 
 			pt.close();
@@ -107,7 +127,7 @@ public class UsersDAO {
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
-		//°Ë»öÇØ¼­ ³ª¿À¸é = Áßº¹µÈ°Ô ÀÖÀ¸¸é false
+		//ï¿½Ë»ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = ï¿½ßºï¿½ï¿½È°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ false
 		System.out.println("return + "+check);
 		return check;
 		
