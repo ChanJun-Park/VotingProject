@@ -212,8 +212,8 @@ height:45px;
 		<td class="td1"><input id="votesearch" type="text" name="search" placeholder="Search.."></td>
 		<td class="td2"><h1><a href="/voting/home" class='no_a_deco'><b>VOTE</b></a></h1></td>
 		<td class="td3">
-			<a href="/voting/addvote"><img src="/voting/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
-			<a href="/voting/mypage"><img src="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></a>
+			<form action="/voting/addvote"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33" height="33" style="padding-top:1px;"/></form>&nbsp;
+			<form action="/voting/mypage" method="post"><input type=image src="/voting/resources/images/Mypage.png" name="Submit" value="Submit" width="30" height="30" style=" padding-bottom:2px;"/></form>
 			<c:if test="${empty sessionScope.loginId}">
 				<span><a href="/voting/login/" class="no_a_deco">로그인</a></span>
 			</c:if>
