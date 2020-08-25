@@ -11,7 +11,7 @@
 $(document).ready(function(){
 
 	$("#signupbtn").on('click',function(){
-		document.getElementById('signupform').submit;
+		$('signupform').submit();
 	})
 
 	$("#loginbtn").on('click',function(){

@@ -41,6 +41,7 @@ public class UsersController {
 			mv.setViewName("Login");
 		}
 		else {
+			mv.addObject("validcheck","success");
 			System.out.println("login 성공");
 			HttpSession session =  req.getSession();
 			session.setAttribute("loginId", vo.getUser_id());
@@ -58,7 +59,6 @@ public class UsersController {
 	
 	
 	@RequestMapping(value = "/signup",method=RequestMethod.POST)
-	//���� �̿ϼ�
 	public ModelAndView signupProcess(UsersVO vo) {
 		ModelAndView mv = new ModelAndView();
 		System.out.println(vo.getPassword());
@@ -66,16 +66,18 @@ public class UsersController {
 		System.out.println(vo.getEmail());
 		
 		user_dao.createUser(vo);
+		
 		mv.setViewName("Login");
 		return mv;
 		
 	}
 	
+	//ajax function(중복체크)
 	@RequestMapping(value = "/dupcheck", method=RequestMethod.POST)
-	public @ResponseBody String dupcheck(@RequestParam("user_id") String user_id) {
+	public @ResponseBody String dupcheck(@RequestParam("idoremail") String idoremail,@RequestParam("idemail") String idemail) {
 	
 		String dupcheck;
-		dupcheck= user_dao.dupcheck(user_id);
+		dupcheck= user_dao.dupcheck(idoremail,idemail);
 		System.out.println(dupcheck);
 		return dupcheck;
 		

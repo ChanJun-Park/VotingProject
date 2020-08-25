@@ -26,7 +26,7 @@ public class UsersDAO {
 			pt.setString(4, vo.getEmail());
 			
 			
-			int insertRow = pt.executeUpdate();
+			pt.executeUpdate();
 			
 		
 			pt.close();
@@ -95,23 +95,24 @@ public class UsersDAO {
 		
 	}
 
-	
-	//�ߺ�üũ
-	public String dupcheck(String user_id) {
+	//id혹은 email넣고, id인지 email인지 변수로 넘겨줌
+	public String dupcheck(String idoremail, String idemail) {
 		String check ="";
 		try {
-			
-			String sql = "select user_id from users where user_id = ?"; 
-			//prepared statement
+			String sql;
+			if(idemail.equals("email")) {
+				sql = "select email from users where email=?";
+			}
+			else {
+				sql = "select user_id from users where user_id=?";
+			}
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
 					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
 			PreparedStatement pt = con.prepareStatement(sql);
-			pt.setString(1, user_id);
+			pt.setString(1, idoremail);
 			ResultSet rs = pt.executeQuery();
-	
-				
 				if(rs.next()==true) {
 					check = "NO";
 				}
