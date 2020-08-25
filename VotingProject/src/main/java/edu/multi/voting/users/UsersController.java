@@ -23,8 +23,8 @@ public class UsersController {
 	public String loginform() {
 		return "Login";
 	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	
+	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public ModelAndView loginProcess(String user_id, String password, HttpServletRequest req) {
 		System.out.println(user_id);
 		System.out.println(password);
@@ -38,12 +38,12 @@ public class UsersController {
 			mv.addObject("validcheck", "비밀번호가 일치하지 않습니다.");
 			mv.setViewName("Login");
 		} else {
+			mv.addObject("validcheck","success");
 			System.out.println("login 성공");
 			HttpSession session = req.getSession();
 			session.setAttribute("loginId", vo.getUser_id());
 			mv.setViewName("redirect:/home");
 		}
-
 		return mv;
 	}
 
@@ -51,8 +51,10 @@ public class UsersController {
 	public String signupform() {
 		return "CreateID";
 	}
-
-	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	
+	
+	
+	@RequestMapping(value = "/signup",method=RequestMethod.POST)
 	public ModelAndView signupProcess(UsersVO vo) {
 		ModelAndView mv = new ModelAndView();
 		System.out.println(vo.getPassword());
@@ -60,16 +62,18 @@ public class UsersController {
 		System.out.println(vo.getEmail());
 
 		user_dao.createUser(vo);
+		
 		mv.setViewName("Login");
 		return mv;
 
 	}
-
-	@RequestMapping(value = "/dupcheck", method = RequestMethod.POST)
-	public @ResponseBody String dupcheck(@RequestParam("user_id") String user_id) {
-
+	
+	//ajax function(중복체크)
+	@RequestMapping(value = "/dupcheck", method=RequestMethod.POST)
+	public @ResponseBody String dupcheck(@RequestParam("idoremail") String idoremail,@RequestParam("idemail") String idemail) {
+	
 		String dupcheck;
-		dupcheck = user_dao.dupcheck(user_id);
+		dupcheck= user_dao.dupcheck(idoremail,idemail);
 		System.out.println(dupcheck);
 		return dupcheck;
 
