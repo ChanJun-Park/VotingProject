@@ -77,7 +77,7 @@ $(document).ready(function(){
 		})});
 	$("#signupbtn").on('click',function(){
 		if(check==true){
-			document.getElementById('signupform').submit;
+			//document.getElementById('signupform').submit;
 		}
 		else{
 			alert("중복확인 필요합니다.");
@@ -96,12 +96,13 @@ $(document).ready(function(){
 <hr>
 <br>
 <br>
-<form action="/voting/signup" id = "signupform" method="POST" >
+<!-- /voting/signup -->
+<form action=" " id = "signupform" method="POST" >
 <table>
 <tr>
 <td><label for="id"><b>아이디 :&nbsp;</b></label></td>
 <td><input id="user_id" type="text" name="user_id" placeholder="아이디 입력" style="width:130px;" required/>&nbsp;&nbsp;
-<button id = "dupcheckbtn" class="btn log" style ="width: 100px;height:40px; font-size: 16px;">중복확인</button></td>
+<button type = "button" id = "dupcheckbtn" class="btn log" style ="width: 100px;height:40px; font-size: 16px;">중복확인</button></td>
 
 
 </tr>
@@ -120,7 +121,7 @@ $(document).ready(function(){
 </table>
 <br>
 <br>
-<button class="btn log" id = "signupbtn">완료</button>
+<button type="button" class="btn log" id = "signupbtn">완료</button>
 </form>
 </body>
 </html>
