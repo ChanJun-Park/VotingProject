@@ -21,11 +21,7 @@ $(document).ready(function(){
 	
 	
 });
-
-
 </script>
-
-
 
 
 <style>
@@ -84,13 +80,14 @@ input {
 </tr>
 </table>
 <br>
-<h3 id = "validcheck">${validcheck}</h3>
+<h2 id = "validcheck">${validcheck}</h2>
+<br>
 <button class="btn log" id ="loginbtn" >로그인</button><br>
 <!-- onclick="document.getElementById('loginform').submit;" -->
 </form>
 <br>
 <form action = "/voting/signup" id = "signupform" method="GET">
-<button class="btn log" id = "signupbtn">회원가입</button>&nbsp;&nbsp;
+<button class="btn log" id = "signupbtn">회원가입</button>
 </form>
 
 </body>

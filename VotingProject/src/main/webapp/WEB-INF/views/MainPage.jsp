@@ -13,9 +13,10 @@ table {
 	width:75%;
 	}
 .td1{text-align: left;}
-.td2{text-align: center;}
-.td3{text-align: right;}
-.td4{
+.td2{width:72%; text-align: center;}
+.td3{width:7%; text-align: right;}
+.td4{width:7%; text-align: right;}
+.td5{
 	text-align: center;
 	color: gray;
 }
@@ -191,7 +192,6 @@ height:45px;
   to {opacity: 1}
 }
 
-
 </style>
 <title>메인 페이지</title>
 </head>
@@ -205,9 +205,9 @@ height:45px;
 <tr>
 <td class="td1"><input type="text" name="search" placeholder="Search.."></td>
 <td class="td2"><h1><b>VOTE</b></h1></td>
-<td class="td3"><a href="/VotingProject/CreatePage.jsp"><img src="/voting/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
-<form action="/voting/mypage" method="post"><input type=submit alt="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></form></td></tr>
-<tr><td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td></tr>
+<td class="td3"><form action="/voting/create"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33px" height="33px" style ="padding-top:1px;"/></form></td>
+<td class="td4"><form action="/voting/mypage" method="post"><input type=image src="/voting/resources/images/Mypage.png" name="Submit" value="Submit"  width="30px" height="30px" style="padding-bottom:2px;"/></form></td></tr>
+<tr><td colspan="3" class="td5"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td></tr>
 </table>
 </header>
 <section class="menu1">
@@ -226,7 +226,7 @@ height:45px;
 		    <p class="q">${voteVO.contents }</p>
 		    <c:forEach var="pickVO" items="${voteVO.pickList }">
 		    	<div class="box">
-		    		<input class="btn log" type=button value="${pickVO.pickName }" />
+		    		<input id="picklist" class="btn log" type=button value="${pickVO.pickName }" />
 		    	</div>	
 		    </c:forEach>
 		    
@@ -379,6 +379,7 @@ $(".btn_good").on("click", function() {
 //         com.style.display = "none";
 //     }
 // }
+
 </script>
 
 </body>

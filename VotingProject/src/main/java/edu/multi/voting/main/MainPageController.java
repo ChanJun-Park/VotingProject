@@ -33,4 +33,6 @@ public class MainPageController {
 		mv.setViewName("MainPage");
 		return mv;
 	}
+	
+
 }
