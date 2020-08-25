@@ -118,7 +118,7 @@ public class UsersDAO {
 				else {
 					check = "YES";
 				}
-				System.out.println("�ߺ�üũ: "+check);
+				System.out.println("중복: "+check);
 			
 
 			pt.close();
@@ -127,7 +127,6 @@ public class UsersDAO {
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
-		//�˻��ؼ� ������ = �ߺ��Ȱ� ������ false
 		System.out.println("return + "+check);
 		return check;
 		

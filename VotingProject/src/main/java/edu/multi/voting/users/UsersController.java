@@ -30,19 +30,16 @@ public class UsersController {
 		UsersVO vo = new UsersVO();
 		vo=user_dao.validcheck(user_id,password);
 		if(vo.getUser_id()==null) {
-			System.out.println("¾ÆÀÌµğ Á¸Àç X");
-			mv.addObject("validcheck","¾ÆÀÌµğ°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù. È¸¿ø°¡ÀÔÇÏ¼¼¿ä.");
+			mv.addObject("validcheck","ì•„ì´ë””ê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. íšŒì›ê°€ì…í•˜ì„¸ìš”.");
 			mv.setViewName("Login");
 		}
 		else if(vo.getPassword().equals(password)==false) {
-			System.out.println("ºñ¹Ğ¹øÈ£ ÀÏÄ¡ X");
-			mv.addObject("validcheck","ºñ¹Ğ¹øÈ£°¡ ÀÏÄ¡ÇÏÁö ¾Ê½À´Ï´Ù.");
+			mv.addObject("validcheck","ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.");
 			mv.setViewName("Login");
 		}
 		else {
-			System.out.println("¼º°ø");
+			System.out.println("ï¿½ï¿½ï¿½ï¿½");
 			mv.addObject("validcheck","success");
-			//¸ŞÀÎÈ­¸éÀ¸·Î ³Ñ¾î°¨
 			mv.setViewName("MainPage");
 		}
 		
@@ -57,7 +54,7 @@ public class UsersController {
 	
 	
 	@RequestMapping(value = "/signup",method=RequestMethod.POST)
-	//¾ÆÁ÷ ¹Ì¿Ï¼º
+	//ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¿Ï¼ï¿½
 	public ModelAndView signupProcess(UsersVO vo) {
 		ModelAndView mv = new ModelAndView();
 		System.out.println(vo.getPassword());
