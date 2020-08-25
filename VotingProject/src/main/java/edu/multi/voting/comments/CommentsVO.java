@@ -4,6 +4,7 @@ package edu.multi.voting.comments;
 public class CommentsVO {
 	int comment_id, vote_id;
 	String writer_id, contents, time;
+	
 	public int getComment_id() {
 		return comment_id;
 	}
@@ -34,7 +35,11 @@ public class CommentsVO {
 	public void setTime(String time) {
 		this.time = time;
 	}
-	
+	@Override
+	public String toString() {
+		return "CommentsVO [comment_id=" + comment_id + ", vote_id=" + vote_id + ", writer_id=" + writer_id
+				+ ", contents=" + contents + ", time=" + time + "]";
+	}
 	
 	
 
