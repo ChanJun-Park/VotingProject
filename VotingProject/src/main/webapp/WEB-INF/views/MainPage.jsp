@@ -191,6 +191,11 @@ height:45px;
   to {opacity: 1}
 }
 
+/* a 태그 텍스트 데코 없애기 */
+.no_a_deco {
+	text-decoration: none;
+	color:black;
+}
 
 </style>
 <title>메인 페이지</title>
@@ -217,13 +222,25 @@ $(document).ready(function(){
 <br>
 <br>
 <table>
-<tr>
-<td class="td1"><input type="text" name="search" placeholder="Search.."></td>
-<td class="td2"><h1><b>VOTE</b></h1></td>
-<td class="td3"><a href="/VotingProject/CreatePage.jsp"><img src="/voting/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
-<a href="/voting/Mypage.jsp"><img src="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></a></td></tr>
-<tr><td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td></tr>
-</table>
+	<tr>
+		<td class="td1"><input id="votesearch" type="text" name="search" placeholder="Search.."></td>
+		<td class="td2"><h1><a href="/voting/home" class='no_a_deco'><b>VOTE</b></a></h1></td>
+		<td class="td3">
+			<a href="/voting/addvote"><img src="/voting/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
+			<a href="/voting/mypage"><img src="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></a>
+			<c:if test="${empty sessionScope.loginId}">
+				<span><a href="/voting/login/" class="no_a_deco">로그인</a></span>
+			</c:if>
+			<c:if test="${not empty sessionScope.loginId}">
+				<span id="loginId">${sessionScope.loginId}</span>
+				<span><a href="/voting/loout/" class="no_a_deco">로그아웃</a></span>
+			</c:if>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td>
+	</tr>
+	</table>
 </header>
 <section class="menu1">
 <br>
@@ -317,6 +334,7 @@ $(document).ready(function(){
  	<span class="dot" onclick="currentSlide(2)"></span> 
 	<span class="dot" onclick="currentSlide(3)"></span> 
 </div>
+</div>
 <br>
 <br>
 <br>
@@ -364,24 +382,34 @@ $(".comment").on("click", ".close", function() {
 });
 
 $(".btn_good").on("click", function() {
+	console.log("좋아요 버튼 클릭됨");
+	// 로그인이 되어 있는지 확인
+	var loginObject = $("#loginId");
+	if (loginObject.length == 0) {
+		console.log("로그인 되어 있지 않음");
+		alert("로그인이 필요한 기능입니다.");
+		return;
+	}
+	
+	var login_id = loginObject.text();
 	var vote_id = $(this).prev().val();
 	// 투표 좋아요 카운트 증가
 	// 투표에 좋아요 증가
-// 	$.ajax({
-// 		url : '/voting/likevote',
-// 		data : {'seq':'1'},
-// 		type : 'post',
-// 		dataType : 'json',
-// 		success : function(serverdata) {
-// 			$("#result").html(serverdata.seq + ":" + serverdata.title + ":" + serverdata.contents);
-// 		}
-// 		error : function() {
+	$.ajax({
+		url : '/voting/likevote',
+		data : {'login_id':login_id, 'vote_id': vote_id},
+		type : 'post',
+		dataType : 'json',
+		success : function(serverdata) {
+			
+		},
+		error : function() {
 				
-// 		}, 
-// 		complete : function() {
+		}, 
+		complete : function() {
 				
-// 		}
-	//});// ajax end
+		}
+	});// ajax end
 });
 
 // x_btn.onclick = function(){
@@ -392,6 +420,18 @@ $(".btn_good").on("click", function() {
 //         com.style.display = "none";
 //     }
 // }
+
+// 투표 검색 리스트 보여주기
+$("#votesearch").on("keydown", function(e) {
+	// 엔터키가 눌린건지 체크
+	if (e.keyCode == 13) {
+		// 검색 창에 입력된 문자열 가져오기
+		var searchTargetStr = $(this).val();
+		console.log(searchTargetStr);
+		location.href="/voting/search?searchTargetStr=" + searchTargetStr; 
+	}
+	
+});
 </script>
 
 </body>

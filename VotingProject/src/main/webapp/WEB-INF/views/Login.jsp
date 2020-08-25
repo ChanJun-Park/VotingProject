@@ -4,6 +4,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
+<script src="/voting/resources/jquery-3.2.1.min.js"></script>
+
+<script>
+$(document).ready(function(){
+
+	$("#signupbtn").on('click',function(){
+		document.getElementById('signupform').submit;
+	})
+
+	$("#loginbtn").on('click',function(){
+		document.getElementById('loginform').submit;
+		//alert("${validcheck}");
+	})
+	
+	
+});
+
+
+</script>
+
+
+
+
 <style>
 body {
 	text-align:center;
@@ -23,6 +47,10 @@ input {
     font-size: 14px;
     height:25px;
 }
+#validcheck{
+	font-size: 13px;
+	color:red;
+}
 
 /* 버튼 효과 */
 .btn {
@@ -31,6 +59,7 @@ input {
     padding: 10px 16px;
     font-size: 16px;
     cursor: pointer;
+    width:30%;
 }
 .log {background-color: #ff9800;}
 .log:hover {background: #e68a00;}
@@ -42,6 +71,8 @@ input {
 <h1><b>Login</b></h1>
 <hr>
 <br>
+
+<form action="/voting/login" id = "loginform" method="POST" >
 <table>
 <tr>
 <td><label for="id"><b>아이디 :&nbsp;&nbsp;</b></label></td>
@@ -49,11 +80,18 @@ input {
 </tr>
 <tr>
 <td><label for="pw"><b>비밀번호 :&nbsp;&nbsp;</b></label></td>
-<td><input id="id" type="password" name="user_pass" placeholder="비밀번호 입력" required/></td>
+<td><input id="pw" type="password" name="password" placeholder="비밀번호 입력" required/></td>
 </tr>
 </table>
 <br>
-<button class="btn log" onclick="location.href='/VotingProject/CreateID.jsp'">회원가입</button>&nbsp;&nbsp;
-<button class="btn log" onclick="location.href='/VotingProject/MainPage.jsp'">로그인</button>
+<h3 id = "validcheck">${validcheck}</h3>
+<button class="btn log" id ="loginbtn" >로그인</button><br>
+<!-- onclick="document.getElementById('loginform').submit;" -->
+</form>
+<br>
+<form action = "/voting/signup" id = "signupform" method="GET">
+<button class="btn log" id = "signupbtn">회원가입</button>&nbsp;&nbsp;
+</form>
+
 </body>
 </html>

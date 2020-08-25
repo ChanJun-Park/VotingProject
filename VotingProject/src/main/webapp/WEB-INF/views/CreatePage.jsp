@@ -28,7 +28,9 @@ input, textarea{
 .btn {
     border: none;
     color: white;
-    padding: 10px 120px;
+   /*  padding: 10px 120px; */
+    width : 30%;
+    height : 3em;
     font-size: 16px;
     cursor: pointer;
 }
@@ -41,6 +43,7 @@ input, textarea{
 <h1><b>내 투표 만들기</b></h1>
 <hr>
 <br>
+<form action="/voting/addvote" method="post">
 <table>
 <tr>
 <td><h4>Title :&nbsp;&nbsp;</h4></td><td><input type="text" name="title" style="height: 25px;" placeholder="투표 제목 입력" required/></td>
@@ -49,21 +52,22 @@ input, textarea{
 <td rowspan="2"><h4>Contents :&nbsp;&nbsp;</h4></td>
 </tr>
 <tr>
-<td><textarea rows="6%" cols="30%" placeholder="투표 내용 입력"></textarea></td>
+<td><textarea name="contents" rows="6%" cols="30%" placeholder="투표 내용 입력"></textarea></td>
 </tr>
 <tr>
 <td rowspan="4"><h4>Choices :&nbsp;&nbsp;</h4></td>
-<td><input type="text" name="title" style="height: 25px;" placeholder=" 1. 첫 번째 답변 입력"/></td>
+<td><input name="content1" type="text" style="height: 25px;" placeholder=" 1. 첫 번째 답변 입력" required/></td>
 </tr><tr>
-<td><input type="text" name="title" style="height: 25px;" placeholder=" 2. 두 번째 답변 입력"/></td>
+<td><input name="content2" type="text" style="height: 25px;" placeholder=" 2. 두 번째 답변 입력"/></td>
 </tr><tr>
-<td><input type="text" name="title" style="height: 25px;" placeholder=" 3. 세 번째 답변 입력"/></td>
+<td><input name="content3" type="text" style="height: 25px;" placeholder=" 3. 세 번째 답변 입력"/></td>
 </tr><tr>
-<td><input type="text" name="title" style="height: 25px;" placeholder=" 4. 네 번째 답변 입력"/></td>
+<td><input name="content4" type="text"  style="height: 25px;" placeholder=" 4. 네 번째 답변 입력"/></td>
 </tr>
 </table>
 <br>
 <br>
-<button class="btn log" onclick="self.close()">추가하기</button>
+<input type=submit class="btn log" value="투표 추가하기"/>
+</form>
 </body>
 </html>
