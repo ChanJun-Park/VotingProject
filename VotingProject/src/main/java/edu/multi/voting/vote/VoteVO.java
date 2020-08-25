@@ -1,9 +1,9 @@
 package edu.multi.voting.vote;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import org.springframework.stereotype.Repository;
-import java.util.ArrayList;
 
 import edu.multi.voting.pick.PickVO;
 
@@ -21,6 +21,14 @@ public class VoteVO {
 	int like_count;
 	int comment_count;
 	
+	ArrayList<PickVO> pickList;
+	
+	public ArrayList<PickVO> getPickList() {
+		return pickList;
+	}
+	public void setPickList(ArrayList<PickVO> pickList) {
+		this.pickList = pickList;
+	}
 	public int getVote_id() {
 		return vote_id;
 	}

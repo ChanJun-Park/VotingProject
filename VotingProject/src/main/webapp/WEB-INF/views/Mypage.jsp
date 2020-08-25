@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,41 +36,76 @@ tr td:first-child{
 .log:hover {background: #e68a00;}
 
 
-#result{
+.MyVote{
 	margin:auto;
 	width:60%;
+	
 }
+.MyFavorite{
+	margin:auto;
+	width:60%;
+	display:none;
+
+}
+#del, #chk {
+    width:160px;
+    margin-top:10px;
+}
+
+
+
 </style>
 
 <title>내 투표함</title>
-
-<script src="/VotingProject/resources/jquery-3.2.1.min.js"></script>
-<script>
-$(document).ready(function(){
-	$.ajax({
-		type : "GET",
-		url : "/VotingProject/MyPage_MyVote.jsp",
-		dataType:"text",
-		success : function(serverdata){
-			$("#result").html(serverdata);	
-			alert(serveradata);
-		}		
-	});
-});
-</script>
-
 </head>
 
 <body>
 <h1><b>My Voting</b></h1>
 <hr>
 <br>
-<button class="btn log" onclick="requestAjax1()">내 투표</button>&nbsp;&nbsp;
-<button class="btn log" onclick="requestAjax2()">즐겨찾기</button>
+<button class="btn log" onclick="loadingMyVote()">내 투표</button>&nbsp;&nbsp;
+<button class="btn log" onclick="loadingMyFavorite()">즐겨찾기</button>
 <br>
 <br>
 
-<div id="result"></div>
+
+<div class="MyVote">
+<hr>
+<c:forEach var="voteVO" items="${myvotes }">
+		<table>
+		<tr>
+		<td>${voteVO.title }</td>
+		<td style="align-content:  center;">
+		<form action="/voting/deletevote" method="get">
+		<input type=hidden name="vote_id" value="${voteVO.vote_id }"/>
+		<input type=submit id="del" class="btn log" value="삭제"/>
+		</form>
+		</td>
+		</tr>
+		</table>
+		<br>
+		<hr>
+</c:forEach>
+</div>
+<div class="MyFavorite">
+<hr>
+<c:forEach var="voteVO" items="${myfavorites }">
+		<table>
+		<tr>
+		<td>${voteVO.title }</td>
+		<td style="align-content:  center;">
+		<form action="/voting/deletevote" method="get">
+		<input type=hidden name="vote_id" value="${voteVO.vote_id }"/> <!-- 이거 맞나; 이부분 수정 필요 !  -->
+		<input type=submit id="chk" class="btn log" value="확인하러가기"/>
+		</form>
+		</td>
+		</tr>
+		</table>
+		<br>
+		<hr>
+</c:forEach>
+</div>
+
 
 <br>
 <br>
@@ -80,25 +116,15 @@ $(document).ready(function(){
 <button class="btn log" onclick="location.href='/VotingProject/MainPage.jsp'">메인 화면으로 이동</button>
 
 <script>
-function requestAjax1(){
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function(){
-		var result = document.getElementById("result");
-		if(xhr.status==200&&xhr.readyState == XMLHttpRequest.DONE)
-			result.innerHTML = xhr.responseText;
-	};
-	xhr.open("GET","/VotingProject/MyPage_MyVote.jsp",true);
-	xhr.send();
+var vote = document.getElementsByClassName("MyVote")[0];
+var favorite = document.getElementsByClassName("MyFavorite")[0];
+function loadingMyVote(){
+	favorite.style.display="none";
+	vote.style.display="table";
 }
-function requestAjax2(){
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function(){
-		var result = document.getElementById("result");
-		if(xhr.status==200&&xhr.readyState == XMLHttpRequest.DONE)
-			result.innerHTML = xhr.responseText;
-	};
-	xhr.open("GET","/VotingProject/MyPage_Favorite.jsp",true);
-	xhr.send();
+function loadingMyFavorite(){
+	favorite.style.display="table";
+	vote.style.display="none";
 }
 </script>
 
