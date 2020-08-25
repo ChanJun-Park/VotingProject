@@ -1,5 +1,8 @@
 package edu.multi.voting.users;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +26,7 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public ModelAndView loginProcess(String user_id, String password) {
+	public ModelAndView loginProcess(String user_id, String password, HttpServletRequest req) {
 		System.out.println(user_id);
 		System.out.println(password);
 		ModelAndView mv = new ModelAndView();
@@ -38,9 +41,10 @@ public class UsersController {
 			mv.setViewName("Login");
 		}
 		else {
-			System.out.println("����");
-			mv.addObject("validcheck","success");
-			mv.setViewName("MainPage");
+			System.out.println("login 성공");
+			HttpSession session =  req.getSession();
+			session.setAttribute("loginId", vo.getUser_id());
+			mv.setViewName("redirect:/home");
 		}
 		
 		return mv;

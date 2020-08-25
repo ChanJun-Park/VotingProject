@@ -228,5 +228,41 @@ public class VoteDAO {
 		
 		return picks;
 	}
+	public ArrayList<VoteVO> getSearchedVoteList(String searchTargetStr) {
+		String sql = "select * from vote where title like ? or contents like ?";
+		ArrayList<VoteVO> votes = new ArrayList<VoteVO>();
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(searchTargetStr);
+				pt.setString(1, "%" + searchTargetStr + "%");
+				pt.setString(2, "%" + searchTargetStr + "%");
+				
+				ResultSet rs = pt.executeQuery();
+				
+				while(rs.next()) {
+					VoteVO vo = new VoteVO();
+					vo.setVote_id(rs.getInt("vote_id"));
+					vo.setPoster_id(rs.getString("poster_id"));
+					vo.setTitle(rs.getString("title"));
+					vo.setContents(rs.getString("contents"));
+					vo.setTime(rs.getDate("time"));
+					vo.setLike_count(rs.getInt("like_count"));
+					vo.setComment_count(rs.getInt("comment_count"));
+					votes.add(vo);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+
+		return votes;
+	}
 	
 }
