@@ -5,11 +5,6 @@ public class UsersVO {
 	String nickname;
 	String password;
 	String email;
-	@Override
-	public String toString() {
-		return "UsersVO [user_id=" + user_id + ", nickname=" + nickname + ", password=" + password + ", email=" + email
-				+ "]";
-	}
 	public String getUser_id() {
 		return user_id;
 	}
@@ -34,9 +29,10 @@ public class UsersVO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
-	
-	
+	@Override
+	public String toString() {
+		return "UsersVO [user_id=" + user_id + ", nickname=" + nickname + ", password=" + password + ", email=" + email
+				+ "]";
+	}
 	
 }

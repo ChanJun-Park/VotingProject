@@ -206,7 +206,7 @@ height:45px;
 <td class="td1"><input type="text" name="search" placeholder="Search.."></td>
 <td class="td2"><h1><b>VOTE</b></h1></td>
 <td class="td3"><a href="/VotingProject/CreatePage.jsp"><img src="/voting/resources/images/Create.png" width="33" height="33" style="padding-top:1px;"></a>&nbsp;
-<a href="/voting/Mypage.jsp"><img src="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></a></td></tr>
+<form action="/voting/mypage" method="post"><input type=submit alt="/voting/resources/images/Mypage.png" width="30" height="30" style=" padding-bottom:2px;"></form></td></tr>
 <tr><td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td></tr>
 </table>
 </header>
@@ -303,6 +303,7 @@ height:45px;
  	<span class="dot" onclick="currentSlide(2)"></span> 
 	<span class="dot" onclick="currentSlide(3)"></span> 
 </div>
+</div>
 <br>
 <br>
 <br>
@@ -367,7 +368,7 @@ $(".btn_good").on("click", function() {
 // 		complete : function() {
 				
 // 		}
-	});// ajax end
+//	});// ajax end
 });
 
 // x_btn.onclick = function(){

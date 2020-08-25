@@ -178,5 +178,55 @@ public class VoteDAO {
 
 		return picks;
 	}
+	public ArrayList<VoteVO> getMyVoteList(String poster_id) {
+		String sql = "select title from vote where poster_id = ?";
+		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			PreparedStatement pt = con.prepareStatement(sql);
+				
+			pt.setString(1, poster_id);	
+			ResultSet rs = pt.executeQuery();
+			while(rs.next()) {
+					VoteVO vo = new VoteVO();
+					vo.setTitle(rs.getString("title"));
+					picks.add(vo);
+			}
+		} catch (SQLException e) {
+				e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return picks;
+	}
+	public ArrayList<VoteVO> getMyFavoriteList(String user_id) {
+		String sql = "select v.title from bookmark b, vote v where b.bookmarker_id = ? and b.vote_id = v.vote_id";
+		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			PreparedStatement pt = con.prepareStatement(sql);
+			
+			pt.setString(1, user_id);	
+			ResultSet rs = pt.executeQuery();
+			while(rs.next()) {
+				VoteVO vo = new VoteVO();
+				vo.setTitle(rs.getString("title"));
+				picks.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}  catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return picks;
+	}
 	
 }
