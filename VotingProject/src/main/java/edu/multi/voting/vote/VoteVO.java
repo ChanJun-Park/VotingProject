@@ -21,6 +21,9 @@ public class VoteVO {
 	int like_count;
 	int comment_count;
 	
+	boolean userLikeStatus;
+	boolean userBookmarkStatus;
+	
 	ArrayList<PickVO> pickList;
 	
 	public ArrayList<PickVO> getPickList() {
@@ -94,6 +97,20 @@ public class VoteVO {
 	}
 	public void setComment_count(int comment_count) {
 		this.comment_count = comment_count;
+	}
+	
+	
+	public boolean isUserLikeStatus() {
+		return userLikeStatus;
+	}
+	public void setUserLikeStatus(boolean userLikeStatus) {
+		this.userLikeStatus = userLikeStatus;
+	}
+	public boolean isUserBookmarkStatus() {
+		return userBookmarkStatus;
+	}
+	public void setUserBookmarkStatus(boolean userBookmarkStatus) {
+		this.userBookmarkStatus = userBookmarkStatus;
 	}
 	@Override
 	public String toString() {

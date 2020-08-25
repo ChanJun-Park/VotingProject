@@ -2,6 +2,9 @@ package edu.multi.voting;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +21,13 @@ public class MyPageController {
 	private VoteDAO voteDAO;
 	
 	@RequestMapping(value="/mypage", method=RequestMethod.POST)
-	public ModelAndView myVoteLoading(UsersVO vo) {
+	public ModelAndView myVoteLoading(UsersVO vo, HttpServletRequest req) {
 		
 		ModelAndView mv = new ModelAndView();
+	    HttpSession session = req.getSession();
+	    String loginId = (String) session.getAttribute("loginId");
+	    
+	    
 		//내 투표 리스트 로딩
 		ArrayList<VoteVO> votes = voteDAO.getMyVoteList(vo.getUser_id());
 		//즐겨찾기 로스트 로딩
