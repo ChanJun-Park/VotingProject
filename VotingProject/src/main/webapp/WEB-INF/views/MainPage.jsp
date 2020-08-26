@@ -259,6 +259,11 @@ to {
     width: 10px;
     background-color: black;
  }
+ 
+ .del_btn{
+ 	width : 100px;
+ 	margin-left: 75%;
+ }
 </style>
 <title>메인 페이지</title>
 </head>
@@ -363,7 +368,7 @@ to {
 				<img class="btn_comment"
 					src="/voting/resources/images/Comment.png"><span>${voteVO.comment_count }</span>
 			</div>
-
+			
 			<!-- 댓글 창 -->
 				<div id="${voteVO.vote_id}" class="contentPOP">
 					<div class="comment-content">
@@ -376,6 +381,7 @@ to {
 						</form>
 						<br> <br>
 						<hr>
+						
 						<div id="result${voteVO.vote_id }" class="container" name="result">
 						</div>
 					</div>
@@ -436,6 +442,8 @@ to {
 						var writer_id = $(this).prev().prev().prev().val();
 						var vote_id = $(this).prev().prev().val();
 						var targetDivID = "#result" + vote_id;
+						var com_cnt = parseInt($(this).parent().parent().parent().prev().children('.btn_comment').next().text());
+						var targetCnt = $(this).parent().parent().parent().prev().children('.btn_comment').next();
 						$.ajax({
 								url : '/voting/commentwrite',
 								data : {
@@ -451,9 +459,10 @@ to {
 								"<p><span style=\"font-size:16px;font-weight: bold;padding-bottom: 10px;\">"
 								+ serverdata.writer_id + "</span><br>"+ serverdata.contents
 								+ "<br><span style=\"color:gray;font-size:10px;\">"
-								+ serverdata.time + "</span><input class=\"del_btn\" type=button value=삭제></p><hr>");
-									} 
-									//$(".btn_comment").trigger("click");
+								+ serverdata.time + "</span><input class=\"btn log del_btn\" type=button value=삭제></p><hr>");
+								targetCnt.text(com_cnt+1);
+									}
+								
 									
 								});//ajax end
 						})
@@ -461,7 +470,7 @@ to {
 		$(".btn_comment").on("click",function() {
 							$(this).parent().next().css({"display" : "block"});
 
-							var vote_id = $(this).prev().prev().prev().val();
+							var vote_id = $(this).prev().prev().prev().prev().val();
 							var targetDivID = "#result" + vote_id;
 							// 투표와 관련된 댓글 리스트 불러오기dd
 // 							this.자바스크립트 
@@ -489,7 +498,7 @@ to {
 															+ "<br><span style=\"color:gray;font-size:10px;\">"
 															+ serverdata[i].time + "</span>" 
 															+ "<input type=hidden value=" + serverdata[i].comment_id + ">"
-															+ "<input class=\"del_btn\" type=button value=삭제></p><hr>");
+															+ "<input class=\"btn log del_btn\" type=button value=삭제></p><hr>");
 												}else{
 												$(targetDivID).append("<p><span style=\"font-size:16px;font-weight: bold;padding-bottom: 10px;\">"
 															+ serverdata[i].writer_id + "</span><br>" + serverdata[i].contents
@@ -521,6 +530,11 @@ to {
 			var deleteTarget = $(this).parent();
 			var deleteTarget2 = $(this).parent().next();
 			var vote_id = $(this).parent().parent().prev().prev().prev().prev().children().next().val();
+			
+			var com_cnt = parseInt($(this).parent().parent().parent().parent().prev().children('.btn_comment').next().text());
+			var targetCnt = $(this).parent().parent().parent().parent().prev().children('.btn_comment').next();
+			
+			
 			console.log(comment_id);
 			$.ajax({
 				url : "/voting/commentdelete",
@@ -533,7 +547,8 @@ to {
 						deleteTarget.remove();
 						deleteTarget2.remove();
 					}
-						
+					
+					targetCnt.text(com_cnt-1);
 						
 				}
 					
@@ -542,9 +557,9 @@ to {
 		
 		$(".close").on("click",function() {	
 			$(this).parent().parent().css({"display" : "none"});
-			window.setTimeout(function(){
-				window.location.reload()
-			}, 1);
+// 			window.setTimeout(function(){
+// 				window.location.reload()
+// 			}, 1);
 		});
 		$(".comment").on("click", ".close", function() {
 			$(this).parent().parent().css({
