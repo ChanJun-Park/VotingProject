@@ -291,15 +291,19 @@ to {
 			<br>
 			<h2 class="q">${voteVO.title }</h2>
 			<p class="q">${voteVO.contents }</p>
+			<form action="/voting/pick" method="post">
 			<c:forEach var="pickVO" items="${voteVO.pickList }">
 				<div class="box">
-					<input class="btn log" type=button value="${pickVO.pickName }" />
+					<input type=hidden name="voteId" value="${pickVO.voteId }"/>
+					<input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
+					<input id="pickbtn" class="btn log" type=button value="${pickVO.pickName }" />					
 				</div>
 			</c:forEach>
 
 			<div class="box">
-				<input class="btn participate" type=button value="참여하기" />
+				<input class="btn participate" type=submit value="참여하기" />
 			</div>
+			</form>
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
@@ -325,9 +329,10 @@ to {
 						</div>
 					</div>
 				</div>
-
 		</article>
 	</c:forEach>
+</div>
+</div>
 	<div style="text-align: center">
 		<span class="dot" onclick="currentSlide(1)"></span> 
 		<span class="dot" onclick="currentSlide(2)"></span>
@@ -463,11 +468,11 @@ to {
 			var comment_id = $(this).prev().val();
 			var deleteTarget = $(this).parent();
 			var deleteTarget2 = $(this).parent().next();
-			
+			var vote_id = $(this).parent().parent().prev().prev().prev().prev().children().next().val();
 			console.log(comment_id);
 			$.ajax({
 				url : "/voting/commentdelete",
-				data : {'comment_id' : comment_id},
+				data : {'comment_id' : comment_id, 'vote_id' : vote_id},
 				type : "post",
 				dataType : "json",
 				success : function(serverdata){
@@ -485,6 +490,9 @@ to {
 		
 		$(".close").on("click",function() {	
 			$(this).parent().parent().css({"display" : "none"});
+			window.setTimeout(function(){
+				window.location.reload()
+			}, 1);
 		});
 		$(".comment").on("click", ".close", function() {
 			$(this).parent().parent().css({
@@ -518,6 +526,7 @@ to {
 		//         com.style.display = "none";
 		//     }
 		// }
+
 	</script>
 
 </body>
