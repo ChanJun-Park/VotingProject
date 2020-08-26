@@ -14,12 +14,15 @@ import edu.multi.voting.pick.PickVO;
 
 @Component("dao")
 public class VoteDAO {
-	public void insertVote(VoteVO vo) {
+	public int insertVote(VoteVO vo) {
+		int result = 0;
 		try {
 			String sql = "insert into vote values((select nvl(max(vote_id), 0) + 1 from vote), ? , ?, ?, sysdate,0, 0)";
+			String sql2 = "select max(vote_id) as voteid from vote";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
+			PreparedStatement pt2 = con.prepareStatement(sql2);
 			
 			pt.setString(1, vo.getPoster_id());
 			pt.setString(2, vo.getTitle());
@@ -27,13 +30,19 @@ public class VoteDAO {
 			
 			pt.executeUpdate();
 			pt.close();
+			
+			ResultSet rs = pt2.executeQuery();
+			while(rs.next()) {
+				result= rs.getInt("voteid");
+			}		
+			pt2.close();
 			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return;
+		return result;
 	}
-	public void insertPicks(VoteVO vo) {
+	public void insertPicks(VoteVO vo, int voteid) {
 		try {
 			String sql1 = "insert into pick values(?, 1, ?, 0)";
 			String sql2 = "insert into pick values(?, 2, ?, 0)";
@@ -46,25 +55,25 @@ public class VoteDAO {
 			PreparedStatement pt3 = con.prepareStatement(sql3);
 			PreparedStatement pt4 = con.prepareStatement(sql4);
 			
-			pt1.setInt(1,vo.getVote_id());
+			pt1.setInt(1,voteid);
 			if(vo.getContent1()!=null) {				
 				pt1.setString(2, vo.getContent1());
 			}else {
 				pt1.setString(2, "null");
 			}
-			pt2.setInt(1,vo.getVote_id());
+			pt2.setInt(1,voteid);
 			if(vo.getContent2()!=null) {				
 				pt2.setString(2, vo.getContent2());
 			}else {
 				pt2.setString(2, "null");
 			}
-			pt3.setInt(1,vo.getVote_id());
+			pt3.setInt(1,voteid);
 			if(vo.getContent3()!=null) {				
 				pt3.setString(2, vo.getContent3());
 			}else {
 				pt3.setString(2, "null");
 			}
-			pt4.setInt(1,vo.getVote_id());
+			pt4.setInt(1,voteid);
 			if(vo.getContent4()!=null) {				
 				pt4.setString(2, vo.getContent4());
 			}else {
@@ -84,13 +93,13 @@ public class VoteDAO {
 		}
 		return;
 	}
-	public void deleteVote(VoteVO vo) {
+	public void deleteVote(int vote_id) {
 		try {
 			String sql = "delete from vote where vote_id = ?";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
-			pt.setInt(1, vo.getVote_id());
+			pt.setInt(1, vote_id);
 			
 			pt.executeUpdate();
 			pt.close();
@@ -99,6 +108,40 @@ public class VoteDAO {
 			e.printStackTrace();
 		}
 		return;
+	}
+	public void deletePicks(int vote_id) {
+		try {
+			String sql = "delete from pick where vote_id = ?";
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			PreparedStatement pt = con.prepareStatement(sql);
+			pt.setInt(1, vote_id);
+			
+			pt.executeUpdate();
+			pt.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return;
+		
+	}
+	public void deleteFavortie(int vote_id) {
+		try {
+			String sql = "delete from bookmark where vote_id = ?";
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			PreparedStatement pt = con.prepareStatement(sql);
+			pt.setInt(1, vote_id);
+			
+			pt.executeUpdate();
+			pt.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return;
+		
 	}
 	public void likeVote(VoteVO vo) {
 		try {
@@ -179,7 +222,7 @@ public class VoteDAO {
 		return picks;
 	}
 	public ArrayList<VoteVO> getMyVoteList(String poster_id) {
-		String sql = "select title from vote where poster_id = ?";
+		String sql = "select vote_id,poster_id,title, time, contents from vote where poster_id = ?";
 		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -190,9 +233,16 @@ public class VoteDAO {
 			ResultSet rs = pt.executeQuery();
 			while(rs.next()) {
 					VoteVO vo = new VoteVO();
+					vo.setVote_id(rs.getInt("vote_id"));
+					vo.setPoster_id(rs.getString("poster_id"));
 					vo.setTitle(rs.getString("title"));
+					vo.setContents(rs.getString("contents"));
+					vo.setTime(rs.getDate("time"));
 					picks.add(vo);
 			}
+			pt.close();
+			rs.close();
+			con.close();
 		} catch (SQLException e) {
 				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -204,7 +254,7 @@ public class VoteDAO {
 		return picks;
 	}
 	public ArrayList<VoteVO> getMyFavoriteList(String user_id) {
-		String sql = "select v.title from bookmark b, vote v where b.bookmarker_id = ? and b.vote_id = v.vote_id";
+		String sql = "select v.vote_id, v.poster_id, v.title, v.contents, v.time from bookmark b, vote v where b.bookmarker_id = ? and b.vote_id = v.vote_id";
 		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -215,9 +265,16 @@ public class VoteDAO {
 			ResultSet rs = pt.executeQuery();
 			while(rs.next()) {
 				VoteVO vo = new VoteVO();
+				vo.setVote_id(rs.getInt("vote_id"));
+				vo.setPoster_id(rs.getString("poster_id"));
 				vo.setTitle(rs.getString("title"));
+				vo.setContents(rs.getString("contents"));
+				vo.setTime(rs.getDate("time"));
 				picks.add(vo);
 			}
+			pt.close();
+			rs.close();
+			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -264,10 +321,34 @@ public class VoteDAO {
 
 		return votes;
 	}
-	public boolean checkVoteLike(String login_id, int vote_id) {
+	public boolean isExistVoteLike(String login_id, int vote_id) {
+		String sql = "select count(*) as \"count\" from likevote where user_id=? and vote_id=?";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(login_id);
+				System.out.println(vote_id);
+				pt.setString(1, login_id);
+				pt.setInt(2, vote_id);
+				
+				ResultSet rs = pt.executeQuery();
+				
+				if(rs.next()) {
+					result = rs.getInt("count");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
 		
-		
-		return false;
+		return result == 1;
 	}
 	public ArrayList<VoteVO> getVoteWithId(int vote_id) {
 		String sql = "select * from vote where vote_id=?";
@@ -303,6 +384,52 @@ public class VoteDAO {
 		} 
 
 		return votes;
+	}
+	public int decreaseVoteLike(int vote_id) {
+		String sql = "update vote set like_count = like_count - 1 where vote_id=?";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(vote_id);
+				pt.setInt(1, vote_id);
+				result = pt.executeUpdate();
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		
+		return result;
+	}
+	public int increaseVoteLike(int vote_id) {
+		String sql = "update vote set like_count = like_count + 1 where vote_id=?";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(vote_id);
+				pt.setInt(1, vote_id);
+				result = pt.executeUpdate();
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		
+		return result;
 	}
 	
 }

@@ -9,18 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 // login - post/get , signup - post/get
 
-
 @Controller
 public class UsersController {
-	
+
 	@Autowired
 	UsersDAO user_dao;
-	@RequestMapping(value="/login",method=RequestMethod.GET)
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginform() {
 		return "Login";
 	}
@@ -31,27 +30,24 @@ public class UsersController {
 		System.out.println(password);
 		ModelAndView mv = new ModelAndView();
 		UsersVO vo = new UsersVO();
-		vo=user_dao.validcheck(user_id,password);
-		if(vo.getUser_id()==null) {
-			mv.addObject("validcheck","아이디가 존재하지 않습니다. 회원가입하세요.");
+		vo = user_dao.validcheck(user_id, password);
+		if (vo.getUser_id() == null) {
+			mv.addObject("validcheck", "아이디가 존재하지 않습니다. 회원가입하세요.");
 			mv.setViewName("Login");
-		}
-		else if(vo.getPassword().equals(password)==false) {
-			mv.addObject("validcheck","비밀번호가 일치하지 않습니다.");
+		} else if (vo.getPassword().equals(password) == false) {
+			mv.addObject("validcheck", "비밀번호가 일치하지 않습니다.");
 			mv.setViewName("Login");
-		}
-		else {
+		} else {
 			mv.addObject("validcheck","success");
 			System.out.println("login 성공");
-			HttpSession session =  req.getSession();
+			HttpSession session = req.getSession();
 			session.setAttribute("loginId", vo.getUser_id());
 			mv.setViewName("redirect:/home");
 		}
-		
 		return mv;
 	}
-	
-	@RequestMapping(value = "/signup",method=RequestMethod.GET)
+
+	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signupform() {
 		return "CreateID";
 	}
@@ -64,12 +60,12 @@ public class UsersController {
 		System.out.println(vo.getPassword());
 		System.out.println(vo.getNickname());
 		System.out.println(vo.getEmail());
-		
+
 		user_dao.createUser(vo);
 		
 		mv.setViewName("Login");
 		return mv;
-		
+
 	}
 	
 	//ajax function(중복체크)
@@ -80,11 +76,7 @@ public class UsersController {
 		dupcheck= user_dao.dupcheck(idoremail,idemail);
 		System.out.println(dupcheck);
 		return dupcheck;
-		
+
 	}
-	
-	
+
 }
-	
-
-

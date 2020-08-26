@@ -61,8 +61,6 @@ public class UsersDAO {
 
 		
 	}
-	
-	//id pw��ġüũ
 	public UsersVO validcheck(String user_id,String password) {
 		UsersVO vo=new UsersVO();
 	try {
@@ -89,9 +87,6 @@ public class UsersDAO {
 			}
 		
 		return vo;
-		
-	
-		
 		
 	}
 
