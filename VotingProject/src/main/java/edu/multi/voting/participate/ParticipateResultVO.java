@@ -2,10 +2,15 @@ package edu.multi.voting.participate;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.vote.VoteVO;
+
 @Component
 public class ParticipateResultVO {
 	String result;
 	String errorMsg;
+	
+	VoteVO vote;
+	
 	public String getResult() {
 		return result;
 	}
@@ -17,6 +22,13 @@ public class ParticipateResultVO {
 	}
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
+	}
+	
+	public VoteVO getVote() {
+		return vote;
+	}
+	public void setVote(VoteVO vote) {
+		this.vote = vote;
 	}
 	@Override
 	public String toString() {

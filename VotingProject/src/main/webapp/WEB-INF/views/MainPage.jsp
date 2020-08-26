@@ -309,32 +309,57 @@ to {
 			<br>
 			<h2 class="q">${voteVO.title }</h2>
 			<p class="q">${voteVO.contents }</p>
+
 			<div class="box">
-				 <div class="box pick_list_wrapper">
+				<div class="box pick_list_wrapper">
 			         <c:forEach var="pickVO" items="${voteVO.pickList }">
-			            <div class="box">
-			               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
-			               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />   
-			               <div class="display_result"></div>            
-			            </div>
+			  			<c:choose>
+			  				<c:when test="${voteVO.userParticipated == true }">
+			  					<div class="box">
+					               <input class="btn log pick_btn" type=button value="${pickVO.pickName } - ${pickVO.score} 표" />               
+					            </div>
+			  				</c:when>
+			  				<c:otherwise>
+			  					<div class="box">
+					               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
+					               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />               
+					            </div>
+			  				</c:otherwise>
+			  			</c:choose>
+			            
 			         </c:forEach>
-				 </div>
+				</div>
 					
 				<form action="/voting/pick" method="post">
 					 <div class="submit_pick_wrapper">
 					 	
 					 </div>
 			         <div class="box">
-			         	<input type=hidden name="voteid" value="${voteVO.vote_id }"/>		       
-			            <input class="btn log participate_btn" type=submit value="참여하기" />
+						<c:choose>
+							<c:when test="${voteVO.userParticipated == true }">
+								<input class="btn participate_btn" type=submit value="참여완료" disabled />
+							</c:when>
+							<c:otherwise>
+								<input type=hidden name="voteid" value="${voteVO.vote_id }"/>
+								<input class="btn log participate_btn" type=submit value="참여하기" />
+							</c:otherwise>
+						</c:choose>
 			         </div>
-		         </form>
+		        </form>
 			</div>
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
-				<img class="btn_good" src="/voting/resources/images/Like.jpg"><span>${voteVO.like_count }</span>
-				<img class="btn_star" src="/voting/resources/images/Star.png">
+				<img class="btn_good" src="/voting/resources/images/Like.jpg">
+				<span>${voteVO.like_count }</span>
+				<!-- 준희- 여기!@!@ -->
+				<c:if test="${voteVO.userBookmarkStatus==true }">
+			    <img class="btn_star" src="/voting/resources/images/Star.png">
+			    </c:if>
+			    <c:if test="${voteVO.userBookmarkStatus==false }">
+			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.png">
+			    </c:if>
+			    <!-- 준희 - 여기까지!@@ -->
 				<img class="btn_comment"
 					src="/voting/resources/images/Comment.png"><span>${voteVO.comment_count }</span>
 			</div>
@@ -362,11 +387,15 @@ to {
 	<div id="dots" style="text-align: center">
 	</div>
 	<br> <br> <br>
+	
+	<!-- 	이미지 미리 다운로드 해놓기 -->
+	<img class="btn_star" src="/voting/resources/images/Star.png" style="display:none;">
+	<img class ="btn_star" src = "/voting/resources/images/EmpStar.png" style="display:none;">
 	</section>
 	<!-- jQuery 인클루드 -->
 	<script src="/voting/resources/jquery-3.2.1.min.js"></script>
 	<script>
-	<!-- dot 생성 -->
+	// dot 생성
 	var vote_id = $("#miffy").prev().val();
 	var count_vote = $("#total_vote").val();
 		
@@ -621,6 +650,8 @@ to {
 			}
 			var submit_pick_wrapper = $(this).parent().prev();
 			var participate_btn = $(this);
+			var pick_list_wrapper = $(this).parent().parent().prev();
+			
 
 			// submit_pick_wrapper에 선택된 내용이 추가되어 있는지 체크
 			var picked_input = submit_pick_wrapper.children();
@@ -650,6 +681,17 @@ to {
 						console.log(serverdata.errorMsg);
 						return;
 					}
+					
+					console.log(serverdata);
+					
+					var vote = serverdata.vote;
+					var pickList = vote.pickList;
+					
+					pick_list_wrapper.children(".box").each(function(index, elem){
+						var pickName = pickList[index].pickName;
+						var score = pickList[index].score;
+						$(elem).children(".pick_btn").val(pickName + " - " + score + "표");
+					});
 					
 					participate_btn.attr({"disabled":"disabled"});
 					participate_btn.val("참여 완료");

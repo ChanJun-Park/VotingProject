@@ -239,7 +239,7 @@ public class VoteDAO {
 		return picks;
 	}
 	public ArrayList<VoteVO> getMyVoteList(String poster_id) {
-		String sql = "select vote_id,poster_id,title, time, contents from vote where poster_id = ?";
+		String sql = "select vote_id,poster_id,title, time, contents from vote where poster_id = ? order by time desc";
 		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -271,7 +271,7 @@ public class VoteDAO {
 		return picks;
 	}
 	public ArrayList<VoteVO> getMyFavoriteList(String user_id) {
-		String sql = "select v.vote_id, v.poster_id, v.title, v.contents, v.time from bookmark b, vote v where b.bookmarker_id = ? and b.vote_id = v.vote_id";
+		String sql = "select v.vote_id, v.poster_id, v.title, v.contents, v.time from bookmark b, vote v where b.bookmarker_id = ? and b.vote_id = v.vote_id order by time desc";
 		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -303,7 +303,7 @@ public class VoteDAO {
 		return picks;
 	}
 	public ArrayList<VoteVO> getSearchedVoteList(String searchTargetStr) {
-		String sql = "select * from vote where title like ? or contents like ?";
+		String sql = "select * from vote where title like ? or contents like ? order by time desc";
 		ArrayList<VoteVO> votes = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -367,9 +367,9 @@ public class VoteDAO {
 		
 		return result == 1;
 	}
-	public ArrayList<VoteVO> getVoteWithId(int vote_id) {
+	public VoteVO getVoteWithId(int vote_id) {
 		String sql = "select * from vote where vote_id=?";
-		ArrayList<VoteVO> votes = new ArrayList<VoteVO>();
+		VoteVO vo = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
@@ -382,8 +382,8 @@ public class VoteDAO {
 				
 				ResultSet rs = pt.executeQuery();
 				
-				while(rs.next()) {
-					VoteVO vo = new VoteVO();
+				if (rs.next()) {
+					vo = new VoteVO();
 					vo.setVote_id(rs.getInt("vote_id"));
 					vo.setPoster_id(rs.getString("poster_id"));
 					vo.setTitle(rs.getString("title"));
@@ -391,7 +391,6 @@ public class VoteDAO {
 					vo.setTime(rs.getDate("time"));
 					vo.setLike_count(rs.getInt("like_count"));
 					vo.setComment_count(rs.getInt("comment_count"));
-					votes.add(vo);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -400,7 +399,7 @@ public class VoteDAO {
 			e.printStackTrace();
 		} 
 
-		return votes;
+		return vo;
 	}
 	public int decreaseVoteLike(int vote_id) {
 		String sql = "update vote set like_count = like_count - 1 where vote_id=?";
@@ -446,6 +445,29 @@ public class VoteDAO {
 			e.printStackTrace();
 		} 
 		
+		return result;
+	}
+	public int getTotalVoteCount() {
+		String sql = "select count(*) as \"count\" from vote";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+				ResultSet rs = pt.executeQuery();
+				
+				if (rs.next()) {
+					result = rs.getInt("count");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+
 		return result;
 	}
 	

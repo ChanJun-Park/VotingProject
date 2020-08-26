@@ -1,4 +1,4 @@
-package edu.multi.voting.vote;
+package edu.multi.voting.bookmark;
 
 public class BookmarkVO {
 	int vote_id;

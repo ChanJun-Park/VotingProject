@@ -3,6 +3,7 @@ package edu.multi.voting.likevote;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.stereotype.Component;
@@ -58,6 +59,37 @@ public class LikeVoteDAO {
 		} 
 		
 		return result;
+	}
+
+	public boolean isExist(String loginId, int vote_id) {
+		String sql = "select count(*) as \"count\" from likevote where user_id=? and vote_id=?";
+		int result = 0;
+
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				pt.setString(1, loginId);
+				pt.setInt(2, vote_id);
+				ResultSet rs =  pt.executeQuery();
+
+				if (rs.next()) {
+					result = rs.getInt("count");
+				}		
+
+				pt.close();
+				con.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result != 0;
 	}
 
 }
