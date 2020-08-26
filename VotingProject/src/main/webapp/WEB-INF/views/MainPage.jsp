@@ -174,6 +174,10 @@ body {
 	background: #e68a00;
 }
 
+.selected-btn {
+	background: #e68a00;
+}
+
 .participate {
 	background-color: #b5b5b5;
 	width: 35%;
@@ -291,22 +295,33 @@ to {
 			<br>
 			<h2 class="q">${voteVO.title }</h2>
 			<p class="q">${voteVO.contents }</p>
-			<c:forEach var="pickVO" items="${voteVO.pickList }">
-				<div class="box">
-					<input class="btn log" type=button value="${pickVO.pickName }" />
-				</div>
-			</c:forEach>
-
 			<div class="box">
-				<input class="btn participate" type=button value="참여하기" />
+				 <div class="box pick_list_wrapper">
+			         <c:forEach var="pickVO" items="${voteVO.pickList }">
+			            <div class="box">
+			               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
+			               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />               
+			            </div>
+			         </c:forEach>
+				 </div>
+					
+				<form action="/voting/pick" method="post">
+					 <div class="submit_pick_wrapper">
+					 	
+					 </div>
+			         <div class="box">
+			         	<input type=hidden name="voteid" value="${voteVO.vote_id }"/>		       
+			            <input class="btn participate_btn" type=submit value="참여하기" />
+			         </div>
+		         </form>
 			</div>
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
-				<img class="btn_good" src="/voting/resources/images/Like.jpg">${voteVO.like_count }
+				<img class="btn_good" src="/voting/resources/images/Like.jpg"><span>${voteVO.like_count }</span>
 				<img class="btn_star" src="/voting/resources/images/Star.png">
 				<img class="btn_comment"
-					src="/voting/resources/images/Comment.png">${voteVO.comment_count }
+					src="/voting/resources/images/Comment.png"><span>${voteVO.comment_count }</span>
 			</div>
 
 			<!-- 댓글 창 -->
@@ -492,25 +507,44 @@ to {
 			});
 		});
 
+		// 투표 좋아요 기능
 		$(".btn_good").on("click", function() {
+			// 로그인이 되어 있는지 체크
+			if ($("#loginId").length == 0) {
+				alert("로그인이 필요한 기능입니다");
+				return;
+			}
+			var login_id = $("#loginId").text();
 			var vote_id = $(this).prev().val();
+			var like_count_target = $(this).next();
+			var like_button = $(this);
+			
 			// 투표 좋아요 카운트 증가
 			// 투표에 좋아요 증가
-			// 	$.ajax({
-			// 		url : '/voting/likevote',
-			// 		data : {'seq':'1'},
-			// 		type : 'post',
-			// 		dataType : 'json',
-			// 		success : function(serverdata) {
-			// 			$("#result").html(serverdata.seq + ":" + serverdata.title + ":" + serverdata.contents);
-			// 		}
-			// 		error : function() {
+			$.ajax({
+				url : '/voting/likevote',
+				data : {'login_id':login_id, 'vote_id': vote_id},
+				type : 'post',
+				dataType : 'json',
+				success : function(serverdata) {
+					console.log(serverdata);
+					var count = parseInt(like_count_target.text());
+					
+					if (serverdata.result == "heart") {
+						count += 1;
+						like_count_target.text(count);
+					} else if (serverdata.result == "unheart") {
+						count -= 1;
+						like_count_target.text(count);
+					}
+				},
+				error : function(e) {
+					console.log(e);
+				}, 
+				complete : function() {
 
-			// 		}, 
-			// 		complete : function() {
-
-			// 		}
-			//});// ajax end
+				}
+			});// ajax end
 		});
 
 		// window.onclick = function(event) {
@@ -518,6 +552,101 @@ to {
 		//         com.style.display = "none";
 		//     }
 		// }
+		
+		// 투표 검색 리스트 보여주기
+		$("#votesearch").on("keydown", function(e) {
+			// 엔터키가 눌린건지 체크
+			if (e.keyCode == 13) {
+				// 검색 창에 입력된 문자열 가져오기
+				var searchTargetStr = $(this).val();
+				console.log(searchTargetStr);
+				location.href="/voting/search?searchTargetStr=" + searchTargetStr; 
+			}
+			
+		});
+		
+		// 투표 항목 선택시 서버에 전송할 준비하기
+		$(".pick_btn").on("click", function() {
+			var selected_pick_input = $(this).prev().clone();
+			var pick_list_wrapper = $(this).closest(".pick_list_wrapper");
+			var submit_pick_wrapper = pick_list_wrapper.next().children(".submit_pick_wrapper");
+			
+			console.log(pick_list_wrapper);
+			
+			// 기존에 있던 input pick 지우기
+			submit_pick_wrapper.html("");
+			
+			// 지금 선택된 요소 넣기
+			submit_pick_wrapper.append(selected_pick_input);
+			
+			// 선택된 요소 버튼 색깔 바꾸고, 나머지는 선택 안됨 색깔로 바꾸기
+			toggleButtonStatus(pick_list_wrapper, $(this));
+		});
+		
+		function toggleButtonStatus(pick_list_wrapper, selected_btn) {
+			
+			pick_list_wrapper.children().each(function(index, item){
+				console.log($(item).children(".pick_btn"));
+				$(item).children(".pick_btn").removeClass("selected-btn");
+			});
+			
+			selected_btn.addClass("selected-btn");
+		}
+		
+		// 투표 참여하기
+		$(".participate_btn").on("click", function(e) {
+			// 로그인 했고, 참여한적이 없으며, 선택한 내용이 있어야 투표를 참여할 수 있도록 하기
+			e.preventDefault();
+			
+			// 로그인이 되어 있는지 체크
+			if ($("#loginId").length == 0) {
+				alert("로그인이 필요한 기능입니다");
+				return;
+			}
+			var submit_pick_wrapper = $(this).parent().prev();
+			var participate_btn = $(this);
+
+			// submit_pick_wrapper에 선택된 내용이 추가되어 있는지 체크
+			var picked_input = submit_pick_wrapper.children();
+			if (picked_input.length == 0) {
+				alert("투표하실 항목을 선택해주세요!");
+				return;
+			}
+			
+			var login_id = $("#loginId").text();
+			var vote_id = $(this).prev().val();
+			var pick_no = picked_input.val();
+			
+			console.log(login_id);
+			console.log(vote_id);
+			console.log(pick_no);
+			
+						
+			$.ajax({
+				url : "/voting/participate",
+				data : {'participant_id' : login_id, 
+						'vote_id' : vote_id,
+						'pick_no' : pick_no},
+				type : "post",
+				dataType : "json",
+				success : function(serverdata) {
+					if (serverdata.result == "fail") {
+						console.log(serverdata.errorMsg);
+						return;
+					}
+					
+					participate_btn.attr({"disabled":"disabled"});
+					participate_btn.val("참여 완료");
+				},
+				error : function(e) {
+					console.log(e);
+				}, 
+				complete : function() {
+
+				}
+			});
+			
+		});
 	</script>
 
 </body>

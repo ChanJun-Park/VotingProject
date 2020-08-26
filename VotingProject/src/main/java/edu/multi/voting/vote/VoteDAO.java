@@ -321,10 +321,34 @@ public class VoteDAO {
 
 		return votes;
 	}
-	public boolean checkVoteLike(String login_id, int vote_id) {
+	public boolean isExistVoteLike(String login_id, int vote_id) {
+		String sql = "select count(*) as \"count\" from likevote where user_id=? and vote_id=?";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(login_id);
+				System.out.println(vote_id);
+				pt.setString(1, login_id);
+				pt.setInt(2, vote_id);
+				
+				ResultSet rs = pt.executeQuery();
+				
+				if(rs.next()) {
+					result = rs.getInt("count");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
 		
-		
-		return false;
+		return result == 1;
 	}
 	public ArrayList<VoteVO> getVoteWithId(int vote_id) {
 		String sql = "select * from vote where vote_id=?";
@@ -360,6 +384,52 @@ public class VoteDAO {
 		} 
 
 		return votes;
+	}
+	public int decreaseVoteLike(int vote_id) {
+		String sql = "update vote set like_count = like_count - 1 where vote_id=?";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(vote_id);
+				pt.setInt(1, vote_id);
+				result = pt.executeUpdate();
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		
+		return result;
+	}
+	public int increaseVoteLike(int vote_id) {
+		String sql = "update vote set like_count = like_count + 1 where vote_id=?";
+		int result = 0;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+			) {
+
+				System.out.println(vote_id);
+				pt.setInt(1, vote_id);
+				result = pt.executeUpdate();
+			
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+		
+		return result;
 	}
 	
 }
