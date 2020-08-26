@@ -21,8 +21,8 @@ public class PickDAO {
          result = pt.executeUpdate();
          pt.close();
 
-      } catch (SQLException e) {
-         e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 
       } catch (ClassNotFoundException e) {
          e.printStackTrace();

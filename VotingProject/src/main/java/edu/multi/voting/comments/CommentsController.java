@@ -46,14 +46,14 @@ public class CommentsController {
 	
 	@RequestMapping("/commentdelete")
 	@ResponseBody
-	public String commentDelete(int comment_id) {
+	public String commentDelete(CommentsVO vo) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("{\"result\":");
-		int result = dao.deleteComment(comment_id);
+		int result = dao.deleteComment(vo);
 		if (result == 1) {
-			sb.append("\"ok\", \"deletedCommentId\":").append(comment_id).append("}");
+			sb.append("\"ok\", \"deletedCommentId\":").append(vo.comment_id).append("}");
 		} else {
-			sb.append("\"fail\", \"deletedCommentId\":").append(comment_id).append("}");			
+			sb.append("\"fail\", \"deletedCommentId\":").append(vo.comment_id).append("}");			
 		}
 		
 		return sb.toString();
