@@ -284,7 +284,7 @@ to {
 			</c:if>
 			<c:if test="${not empty sessionScope.loginId}">
 				<span id="loginId">${sessionScope.loginId}</span><br>
-				<span><a href="/voting/loout/" class="no_a_deco">로그아웃</a></span>
+				<span><a href="/voting/logout/" class="no_a_deco">로그아웃</a></span>
 			</c:if>
 		</td>
 	</tr>
@@ -350,7 +350,13 @@ to {
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
+				<c:if test = "${voteVO.userLikeStatus==true }">
 				<img class="btn_good" src="/voting/resources/images/Like.jpg">
+				</c:if>
+				<c:if test = "${voteVO.userLikeStatus==false }">
+				<img class="btn_good" src="/voting/resources/images/NoLike.png">
+				</c:if>
+				
 				<span>${voteVO.like_count }</span>
 				<!-- 준희- 여기!@!@ -->
 				<c:if test="${voteVO.userBookmarkStatus==true }">
@@ -461,8 +467,11 @@ to {
 		$(".btn_comment").on("click",function() {
 							$(this).parent().next().css({"display" : "block"});
 
-							var vote_id = $(this).prev().prev().prev().val();
+							var vote_id = $(this).prev().prev().prev().prev().val();
 							var targetDivID = "#result" + vote_id;
+							
+							console.log(vote_id);
+							
 							// 투표와 관련된 댓글 리스트 불러오기dd
 // 							this.자바스크립트 
 // 							$(this).jquery 함수 -
@@ -576,9 +585,11 @@ to {
 					var count = parseInt(like_count_target.text());
 					
 					if (serverdata.result == "heart") {
+						like_button.attr("src","/voting/resources/images/Like.jpg");
 						count += 1;
 						like_count_target.text(count);
 					} else if (serverdata.result == "unheart") {
+						like_button.attr("src","/voting/resources/images/NoLike.png");
 						count -= 1;
 						like_count_target.text(count);
 					}
