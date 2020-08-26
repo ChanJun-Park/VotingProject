@@ -295,25 +295,43 @@ to {
 			<br>
 			<h2 class="q">${voteVO.title }</h2>
 			<p class="q">${voteVO.contents }</p>
+
 			<div class="box">
-				 <div class="box pick_list_wrapper">
+				<div class="box pick_list_wrapper">
 			         <c:forEach var="pickVO" items="${voteVO.pickList }">
-			            <div class="box">
-			               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
-			               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />               
-			            </div>
+			  			<c:choose>
+			  				<c:when test="${voteVO.userParticipated == true }">
+			  					<div class="box">
+					               <input class="btn log pick_btn" type=button value="${pickVO.pickName } - ${pickVO.score} 표" />               
+					            </div>
+			  				</c:when>
+			  				<c:otherwise>
+			  					<div class="box">
+					               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
+					               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />               
+					            </div>
+			  				</c:otherwise>
+			  			</c:choose>
+			            
 			         </c:forEach>
-				 </div>
+				</div>
 					
 				<form action="/voting/pick" method="post">
 					 <div class="submit_pick_wrapper">
 					 	
 					 </div>
 			         <div class="box">
-			         	<input type=hidden name="voteid" value="${voteVO.vote_id }"/>		       
-			            <input class="btn participate_btn" type=submit value="참여하기" />
+						<c:choose>
+							<c:when test="${voteVO.userParticipated == true }">
+								<input class="btn participate_btn" type=submit value="참여완료" disabled />
+							</c:when>
+							<c:otherwise>
+								<input type=hidden name="voteid" value="${voteVO.vote_id }"/>
+								<input class="btn participate_btn" type=submit value="참여하기" />
+							</c:otherwise>
+						</c:choose>
 			         </div>
-		         </form>
+		        </form>
 			</div>
 
 			<div class="box_ex">
