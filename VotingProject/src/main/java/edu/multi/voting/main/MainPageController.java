@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import edu.multi.voting.bookmark.BookmarkDAO;
+import edu.multi.voting.bookmark.BookmarkVO;
 import edu.multi.voting.pick.PickVO;
 import edu.multi.voting.vote.VoteDAO;
 import edu.multi.voting.vote.VoteVO;
@@ -18,6 +20,8 @@ public class MainPageController {
 	
 	@Autowired
 	private VoteDAO voteDAO;
+	@Autowired
+	private BookmarkDAO bmdao;
 	
 	@RequestMapping(value="/home")
 	public ModelAndView mainPageLoading() {
@@ -31,7 +35,10 @@ public class MainPageController {
 			ArrayList<PickVO> picks = voteDAO.getPickList(v.getVote_id());
 			v.setPickList(picks);
 		}
+		
+		ArrayList<BookmarkVO> bookmarks = bmdao.getBookmark();
 		mv.addObject("votes", votes);
+		mv.addObject("bookmarks",bookmarks);
 		mv.setViewName("MainPage");
 		return mv;
 	}

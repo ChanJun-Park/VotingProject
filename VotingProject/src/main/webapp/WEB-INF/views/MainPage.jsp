@@ -250,11 +250,18 @@ height:45px;
 		    <div class="box">
 		    	<input class="btn participate" type=button value="참여하기" />
 		    </div>
-		    
 		    <div class="box_ex">
-    		    <input type="hidden" name="vote_id" value="${voteVO.vote_id }"/>
+    		    <input type="hidden" id="vote_id" name="vote_id" value="${voteVO.vote_id }"/>
 			    <img class="btn_good" src="/voting/resources/images/Like.jpg">${voteVO.like_count }
+				
+				<!-- 준희- 여기!@!@ -->
+				<c:if test=${voteVO.userBookmarkStatus==true }>
 			    <img class="btn_star" src="/voting/resources/images/Star.png">
+			    </c:if>
+			    <c:if test= ${voteVO.userBookmarkStatus==false }>
+			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.jpg">
+			    </c:if>
+			    <!-- 준희 - 여기까지!@@ -->
 			    <img class="btn_comment" src="/voting/resources/images/Comment.png">${voteVO.comment_count }
 		    </div>
 		    
@@ -291,7 +298,8 @@ height:45px;
     <div class="box"><input class="btn log" type=button value="피자" /><input class="btn log" type=button value="라면"/></div>
     <div class="box_ex">
     <img class="btn_good" src="/VotingProject/resources/images/Like.jpg">
-    <img class="btn_star" src="/VotingProject/resources/images/Star.png">
+
+	<img class="btn_star" src="/VotingProject/resources/images/Star.png">
     <img class="btn_comment" src="/VotingProject/resources/images/Comment.png" id="btn_comment" >
     </div>
     </article>
@@ -350,8 +358,52 @@ function showSlides(n) {
 	  dots[slideIndex-1].className += " active";
 }
 </script>
+
+<!-- 담아놓기 -->
+<script>
+
+
+$(function(){
+	$(".btn_star").on('click',function(){
+		var loginObject = $("#loginId");
+		if (loginObject.length == 0) {
+			console.log("로그인 되어 있지 않음");
+			alert("로그인이 필요한 기능입니다.");
+		}
+		var login_id = loginObject.text();
+		var vote_id = $(this).prev().prev().val();
+
+		$.ajax({
+			url:"addbookmark",
+			method:"post",
+			data:{"bookmarker_id":login_id,
+				"vote_id":vote_id},
+			success:function(color){		
+					if(color=="YES"){
+						//찬별
+						$(this).attr("src","/voting/resources/images/Star.png");
+					}
+					else if(color="NO"){
+						//빈별
+						$(this).attr("src","/voting/resources/images/EmpStar.png");
+					}
+					else{
+						alert("오류입니다.");
+					}
+				}
+				)
+		}
+		)
+	}
+	);
+
+
+</script>
+
+
 <!-- 댓글창 띄우기 -->
 <script>
+
 var com = document.getElementById("comment");
 var btn = document.getElementById("btn_comment");
 var x_btn = document.getElementsByClassName("close")[0];
@@ -374,7 +426,6 @@ $(".btn_good").on("click", function() {
 	if (loginObject.length == 0) {
 		console.log("로그인 되어 있지 않음");
 		alert("로그인이 필요한 기능입니다.");
-		return;
 	}
 	
 	var login_id = loginObject.text();
