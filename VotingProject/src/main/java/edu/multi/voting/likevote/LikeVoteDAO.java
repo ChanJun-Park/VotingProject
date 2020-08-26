@@ -82,7 +82,7 @@ public class LikeVoteDAO {
 
 	public int insertVoteLike(String login_id, int vote_id) {
 		String sql = "insert into likevote values(?, ?)";
-		String sql2 = "update vote set like_count = like_count +1 where vote_id =?";
+//		String sql2 = "update vote set like_count = like_count +1 where vote_id =?";
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -93,12 +93,12 @@ public class LikeVoteDAO {
 				pt.setInt(2, vote_id);
 				result = pt.executeUpdate();
 				
-				PreparedStatement pt2 = con.prepareStatement(sql2);
-				pt2.setInt(1, vote_id);
-				pt2.executeUpdate();
+//				PreparedStatement pt2 = con.prepareStatement(sql2);
+//				pt2.setInt(1, vote_id);
+//				pt2.executeUpdate();
 				
 				pt.close();
-				pt2.close();
+//				pt2.close();
 				
 			
 			} catch (SQLException e) {
