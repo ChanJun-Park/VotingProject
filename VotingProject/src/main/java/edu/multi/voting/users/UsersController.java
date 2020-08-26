@@ -47,11 +47,18 @@ public class UsersController {
 		return mv;
 	}
 
+	@RequestMapping(value="/logout")
+	public String logoutProcess(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		session.removeAttribute("loginId");
+		
+		return "redirect:/login";
+	}
+	
 	@RequestMapping(value = "/signup", method = RequestMethod.GET)
 	public String signupform() {
 		return "CreateID";
 	}
-	
 	
 	
 	@RequestMapping(value = "/signup",method=RequestMethod.POST)

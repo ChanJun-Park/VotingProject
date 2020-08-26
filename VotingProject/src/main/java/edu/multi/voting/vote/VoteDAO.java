@@ -470,6 +470,4 @@ public class VoteDAO {
 
 		return result;
 	}
-	
-	
 }
