@@ -8,27 +8,71 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("lvdao")
 public class LikeVoteDAO {
+	public String findVoteLike(String login_id, int vote_id) {
+		String check="error";
+		try {
+			
+			String sql = "select * from likevote where user_id=? and vote_id = ?";
+
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con = DriverManager.getConnection(
+					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+	
+			PreparedStatement pt = con.prepareStatement(sql);
+	
+			pt.setString(1, login_id);
+			pt.setInt(2, vote_id);
+			System.out.println("loginid="+login_id+" vote_id="+vote_id );
+			ResultSet rs = pt.executeQuery();
+			//이미 북마크 했다.
+			if(rs.next()) {
+				
+				check="liked_already";
+			}
+
+			else {
+				check = "not_marked";
+			}
+
+			pt.close();
+			con.close();
+			
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		
+		return check;
+			
+		}
+		
+
+	
 
 	public int deleteVoteLike(String login_id, int vote_id) {
 		String sql = "delete likevote where user_id=? and vote_id=?";
+		String sql2 = "update vote set like_count = like_count-1 where vote_id =?";
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			try (
 				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
-			) {
+				PreparedStatement pt2 = con.prepareStatement(sql2);
 
 				System.out.println(vote_id);
 				pt.setString(1, login_id);
 				pt.setInt(2, vote_id);
 				result = pt.executeUpdate();
+				
+				pt2.setInt(1, vote_id);
+				pt2.executeUpdate();
 			
+				pt.close();
+				pt2.close();
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
-			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} 
@@ -38,23 +82,29 @@ public class LikeVoteDAO {
 
 	public int insertVoteLike(String login_id, int vote_id) {
 		String sql = "insert into likevote values(?, ?)";
+		String sql2 = "update vote set like_count = like_count +1 where vote_id =?";
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			try (
 				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
-			) {
-
-				System.out.println(vote_id);
+			
 				pt.setString(1, login_id);
 				pt.setInt(2, vote_id);
 				result = pt.executeUpdate();
+				
+				PreparedStatement pt2 = con.prepareStatement(sql2);
+				pt2.setInt(1, vote_id);
+				pt2.executeUpdate();
+				
+				pt.close();
+				pt2.close();
+				
 			
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		} catch (ClassNotFoundException e) {
+		 catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} 
 		

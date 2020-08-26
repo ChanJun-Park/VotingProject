@@ -45,7 +45,7 @@ public class MainPageController {
 		String loginId = (String) session.getAttribute("loginId");
 		
 		// 로그인 확인
-		if (loginId != null) {
+		if (loginId == null) {
 			mv.setViewName("redirect:/login");
 			return mv;
 		}
@@ -69,9 +69,8 @@ public class MainPageController {
 			v.setPickList(picks);
 		}
 		
-		ArrayList<BookmarkVO> bookmarks = bmdao.getBookmark();
+
 		mv.addObject("votes", votes);
-		mv.addObject("bookmarks",bookmarks);
 		mv.setViewName("MainPage");
 		return mv;
 	}

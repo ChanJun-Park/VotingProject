@@ -336,13 +336,19 @@ to {
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
-				<img class="btn_good" src="/voting/resources/images/Like.jpg"><span>${voteVO.like_count }</span>
+				<c:if test="${voteVO.userLikeStatus==true }">
+			    <img class="btn_good" src="/voting/resources/images/Like.jpg">
+			    </c:if>
+			    <c:if test= "${voteVO.userLikeStatus==false }">
+			    <img class ="btn_good" src = "/voting/resources/images/NoLike.png">
+			    </c:if>
+				<span >${voteVO.like_count }</span>
 				<!-- 준희- 여기!@!@ -->
-				<c:if test=${voteVO.userBookmarkStatus==true }>
+				<c:if test="${voteVO.userBookmarkStatus==true }">
 			    <img class="btn_star" src="/voting/resources/images/Star.png">
 			    </c:if>
-			    <c:if test= ${voteVO.userBookmarkStatus==false }>
-			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.jpg">
+			    <c:if test= "${voteVO.userBookmarkStatus==false }">
+			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.png">
 			    </c:if>
 			    <!-- 준희 - 여기까지!@@ -->
 				<img class="btn_comment"
@@ -404,6 +410,85 @@ to {
 			dots[slideIndex - 1].className += " active";
 		}
 	</script>
+	
+	<!-- 좋아요버튼 -->
+	<script>
+		$(".btn_good").on('click',function(){
+			var loginObject = $("#loginId");
+			if (loginObject.length == 0) {
+				console.log("로그인 되어 있지 않음");
+				alert("로그인이 필요한 기능입니다.");
+			}
+			var login_id = loginObject.text();
+			var vote_id = $(this).prev().val();
+			var likebtn = $(this);
+
+
+			$.ajax({
+				url:"addlike",
+				method:"post",
+				data:{"login_id":login_id,
+					"vote_id":vote_id},
+				success:function(color){		
+						if(color=="YES"){
+							likebtn.attr("src","/voting/resources/images/Like.jpg");
+						}
+						else if(color="NO"){
+							likebtn.attr("src","/voting/resources/images/NoLike.png");
+						}
+						else{
+							alert("오류입니다.");
+						}
+					}
+					
+			}
+			
+			
+			)
+		}
+		);
+
+
+
+</script>
+	
+	<!-- 담아놓기 -->
+	<script>
+		$(".btn_star").on('click',function(){
+			var loginObject = $("#loginId");
+			if (loginObject.length == 0) {
+				console.log("로그인 되어 있지 않음");
+				alert("로그인이 필요한 기능입니다.");
+			}
+			var login_id = loginObject.text();
+			var vote_id = $(this).prev().prev().prev().val();
+			var starbtn = $(this);
+			$.ajax({
+				url:"addbookmark",
+				method:"post",
+				data:{"bookmarker_id":login_id,
+					"vote_id":vote_id},
+				success:function(color){		
+						if(color=="YES"){
+							starbtn.attr("src","/voting/resources/images/Star.png");
+						}
+						else if(color="NO"){
+							starbtn.attr("src","/voting/resources/images/EmpStar.png");
+						}
+						else{
+							alert("오류입니다.");
+						}
+					}
+					
+			}
+			)
+		}
+		);
+
+
+</script>
+	
+	
 	<!-- 댓글창 띄우기 -->
 	<script>
 		;
@@ -440,6 +525,10 @@ to {
 									
 								});//ajax end
 						})
+			
+						
+						
+						
 						
 		$(".btn_comment").on("click",function() {
 							$(this).parent().next().css({"display" : "block"});
@@ -540,7 +629,7 @@ to {
 				return;
 			}
 			var login_id = $("#loginId").text();
-			var vote_id = $(this).prev().val();
+			var vote_id = $(this).prev().prev().val();
 			var like_count_target = $(this).next();
 			var like_button = $(this);
 			
