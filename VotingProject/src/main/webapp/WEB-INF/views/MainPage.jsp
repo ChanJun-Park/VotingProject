@@ -13,11 +13,13 @@ table {
 	width:75%;
 	}
 .td1{text-align: left;}
-.td2{width:72%; text-align: center;}
+.td2{width:56%; text-align: center;}
 .td3{width:7%; text-align: right;}
-.td4{width:7%; text-align: right;}
-.td5{
+.td4{width:7%; text-align: center;}
+.td5{width:8%; text-align: right;}
+.td6{
 	text-align: center;
+	padding-left:130px;
 	color: gray;
 }
 
@@ -29,7 +31,7 @@ input[name=search] {
 	border-radius: 4px;
 	font-size: 12px;
 	background-color: white;
-	background-image: url('/VotingProject/resources/images/Search.png');
+	background-image: url('/voting/resources/images/Search.png');
 	background-position: 10px 3px;
 	background-repeat: no-repeat;
 	background-size: 14px 14px;
@@ -162,6 +164,7 @@ body {
 	padding: 8px 20px 15px 20px;
 	font-size: 16px;
 	font-weight: 290;
+	outline:0;
 }
 
 .log {
@@ -170,7 +173,7 @@ body {
 	height: 45px;
 }
 
-.log:hover {
+.selected-btn {
 	background: #e68a00;
 }
 
@@ -187,6 +190,14 @@ body {
 .box {
 	text-align: center;
 }
+/*  참여하기 버튼 */
+.participate_btn{
+	background-color: gray;
+}
+.participate_btn:hover{
+	background-color: #d3d3d3;
+}
+
 
 /* 페이지 번호*/
 .numbertext {
@@ -262,19 +273,23 @@ to {
 		<td class="td1"><input id="votesearch" type="text" name="search" placeholder="Search.."></td>
 		<td class="td2"><h1><a href="/voting/home" class='no_a_deco'><b>VOTE</b></a></h1></td>
 		<td class="td3">
-			<form action="/voting/addvote"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33" height="33" style="padding-top:1px;"/></form>&nbsp;
+			<form action="/voting/addvote"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33" height="33" style="padding-top:1px;"/></form>
+		</td>			
+		<td class="td4">
 			<form action="/voting/mypage" method="post"><input type=image src="/voting/resources/images/Mypage.png" name="Submit" value="Submit" width="30" height="30" style=" padding-bottom:2px;"/></form>
+		</td>
+		<td class="td5">
 			<c:if test="${empty sessionScope.loginId}">
 				<span><a href="/voting/login/" class="no_a_deco">로그인</a></span>
 			</c:if>
 			<c:if test="${not empty sessionScope.loginId}">
-				<span id="loginId">${sessionScope.loginId}</span>
+				<span id="loginId">${sessionScope.loginId}</span><br>
 				<span><a href="/voting/loout/" class="no_a_deco">로그아웃</a></span>
 			</c:if>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td>
+		<td colspan="3" class="td6"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td>
 	</tr>
 	</table>
 </header>
@@ -282,31 +297,71 @@ to {
 <br>
 <br>
 <br>
+<input id = "total_vote" type =hidden value="${count }"/>
+<input id = "slide_idx" type =hidden value="${pageNo }"/>
 <div class="slideshow-container">
-  <div class="mySlides fade">
-  
+  <div class="mySlides fade" style="display:block;">
+ 
     <div class="numbertext">1 / 3</div>
 	<c:forEach var="voteVO" items="${votes }">
-		<article class="new_vote" id="vote${voteVO.vote_id }">
+ 		<input type=hidden value="${voteVO.vote_id }" class="miffy"/>
+		<article class="new_vote" id="miffy">
 			<br>
 			<h2 class="q">${voteVO.title }</h2>
 			<p class="q">${voteVO.contents }</p>
-			<c:forEach var="pickVO" items="${voteVO.pickList }">
-				<div class="box">
-					<input class="btn log" type=button value="${pickVO.pickName }" />
-				</div>
-			</c:forEach>
 
 			<div class="box">
-				<input class="btn participate" type=button value="참여하기" />
+				<div class="box pick_list_wrapper">
+			         <c:forEach var="pickVO" items="${voteVO.pickList }">
+			  			<c:choose>
+			  				<c:when test="${voteVO.userParticipated == true }">
+			  					<div class="box">
+					               <input class="btn log pick_btn" type=button value="${pickVO.pickName } - ${pickVO.score} 표" />               
+					            </div>
+			  				</c:when>
+			  				<c:otherwise>
+			  					<div class="box">
+					               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
+					               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />               
+					            </div>
+			  				</c:otherwise>
+			  			</c:choose>
+			            
+			         </c:forEach>
+				</div>
+					
+				<form action="/voting/pick" method="post">
+					 <div class="submit_pick_wrapper">
+					 	
+					 </div>
+			         <div class="box">
+						<c:choose>
+							<c:when test="${voteVO.userParticipated == true }">
+								<input class="btn participate_btn" type=submit value="참여완료" disabled />
+							</c:when>
+							<c:otherwise>
+								<input type=hidden name="voteid" value="${voteVO.vote_id }"/>
+								<input class="btn log participate_btn" type=submit value="참여하기" />
+							</c:otherwise>
+						</c:choose>
+			         </div>
+		        </form>
 			</div>
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
-				<img class="btn_good" src="/voting/resources/images/Like.jpg">${voteVO.like_count }
-				<img class="btn_star" src="/voting/resources/images/Star.png">
+				<img class="btn_good" src="/voting/resources/images/Like.jpg">
+				<span>${voteVO.like_count }</span>
+				<!-- 준희- 여기!@!@ -->
+				<c:if test="${voteVO.userBookmarkStatus==true }">
+			    <img class="btn_star" src="/voting/resources/images/Star.png">
+			    </c:if>
+			    <c:if test="${voteVO.userBookmarkStatus==false }">
+			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.png">
+			    </c:if>
+			    <!-- 준희 - 여기까지!@@ -->
 				<img class="btn_comment"
-					src="/voting/resources/images/Comment.png">${voteVO.comment_count }
+					src="/voting/resources/images/Comment.png"><span>${voteVO.comment_count }</span>
 			</div>
 
 			<!-- 댓글 창 -->
@@ -325,53 +380,53 @@ to {
 						</div>
 					</div>
 				</div>
-
 		</article>
 	</c:forEach>
-	
-	<div style="text-align: center">
-		<span class="dot" onclick="currentSlide(1)"></span> 
-		<span class="dot" onclick="currentSlide(2)"></span>
-		<span class="dot" onclick="currentSlide(3)"></span>
+</div>
+</div>
+	<div id="dots" style="text-align: center">
 	</div>
 	<br> <br> <br>
+	
+	<!-- 	이미지 미리 다운로드 해놓기 -->
+	<img class="btn_star" src="/voting/resources/images/Star.png" style="display:none;">
+	<img class ="btn_star" src = "/voting/resources/images/EmpStar.png" style="display:none;">
 	</section>
 	<!-- jQuery 인클루드 -->
 	<script src="/voting/resources/jquery-3.2.1.min.js"></script>
-	<!-- 페이지 넘기기 -->
 	<script>
+	// dot 생성
+	var vote_id = $("#miffy").prev().val();
+	var count_vote = $("#total_vote").val();
+		
+	var slide_idx = $("#slide_idx").val();
 	
-		var slideIndex = 1;
-		showSlides(slideIndex);
-		function currentSlide(n) {
-			showSlides(slideIndex = n);
+	var count_dot= Math.ceil(count_vote/5);
+	
+	for (var i = 0; i < count_dot; i++) {
+		$("#dots").append("<span class=\"dot\" onclick=\"showSlides("+(i+1)+")\"></span>");
+	}
+	
+	
+		/* 목록 넣기 */
+		var slideIndex = slide_idx;
+	
+		var dots = document.getElementsByClassName("dot");
+		for (i = 0; i < dots.length; i++) {
+				dots[i].className = dots[i].className.replace("active", "");
 		}
+		dots[slideIndex-1].className += " active"; 
+		
 		function showSlides(n) {
-			var i;
-			var slides = document.getElementsByClassName("mySlides");
-			var dots = document.getElementsByClassName("dot");
-			if (n > slides.length) {
-				slideIndex = 1
-			}
-			if (n < 1) {
-				slideIndex = slides.length
-			}
-			for (i = 0; i < slides.length; i++) {
-				slides[i].style.display = "none";
-			}
-			for (i = 0; i < dots.length; i++) {
-				dots[i].className = dots[i].className.replace(" active", "");
-			}
-			slides[slideIndex - 1].style.display = "block";
-			dots[slideIndex - 1].className += " active";
+			location.href="/voting/home?pageNo="+n;
+			
 		}
-	</script>
+	
+	
+	</script>	
 	<!-- 댓글창 띄우기 -->
 	<script>
-		;
-// 		var comment_form = "<p><span style=\"font-size:16px;font-weight: bold;padding-bottom: 10px;\"></span><br>"
-// 				+ "<br><span style=\"color:gray;font-size:10px;\"></span></p><hr>";
-
+	
 		var com = document.getElementById('${voteVO.vote_id }');
 		var btn = document.getElementById("btn_comment");
 
@@ -466,7 +521,6 @@ to {
 			var deleteTarget = $(this).parent();
 			var deleteTarget2 = $(this).parent().next();
 			var vote_id = $(this).parent().parent().prev().prev().prev().prev().children().next().val();
-			
 			console.log(comment_id);
 			$.ajax({
 				url : "/voting/commentdelete",
@@ -490,8 +544,7 @@ to {
 			$(this).parent().parent().css({"display" : "none"});
 			window.setTimeout(function(){
 				window.location.reload()
-			},1)
-			
+			}, 1);
 		});
 		$(".comment").on("click", ".close", function() {
 			$(this).parent().parent().css({
@@ -499,25 +552,44 @@ to {
 			});
 		});
 
+		// 투표 좋아요 기능
 		$(".btn_good").on("click", function() {
+			// 로그인이 되어 있는지 체크
+			if ($("#loginId").length == 0) {
+				alert("로그인이 필요한 기능입니다");
+				return;
+			}
+			var login_id = $("#loginId").text();
 			var vote_id = $(this).prev().val();
+			var like_count_target = $(this).next();
+			var like_button = $(this);
+			
 			// 투표 좋아요 카운트 증가
 			// 투표에 좋아요 증가
-			// 	$.ajax({
-			// 		url : '/voting/likevote',
-			// 		data : {'seq':'1'},
-			// 		type : 'post',
-			// 		dataType : 'json',
-			// 		success : function(serverdata) {
-			// 			$("#result").html(serverdata.seq + ":" + serverdata.title + ":" + serverdata.contents);
-			// 		}
-			// 		error : function() {
+			$.ajax({
+				url : '/voting/likevote',
+				data : {'login_id':login_id, 'vote_id': vote_id},
+				type : 'post',
+				dataType : 'json',
+				success : function(serverdata) {
+					console.log(serverdata);
+					var count = parseInt(like_count_target.text());
+					
+					if (serverdata.result == "heart") {
+						count += 1;
+						like_count_target.text(count);
+					} else if (serverdata.result == "unheart") {
+						count -= 1;
+						like_count_target.text(count);
+					}
+				},
+				error : function(e) {
+					console.log(e);
+				}, 
+				complete : function() {
 
-			// 		}, 
-			// 		complete : function() {
-
-			// 		}
-			//});// ajax end
+				}
+			});// ajax end
 		});
 
 		// window.onclick = function(event) {
@@ -525,6 +597,114 @@ to {
 		//         com.style.display = "none";
 		//     }
 		// }
+		
+		// 투표 검색 리스트 보여주기
+		$("#votesearch").on("keydown", function(e) {
+			// 엔터키가 눌린건지 체크
+			if (e.keyCode == 13) {
+				// 검색 창에 입력된 문자열 가져오기
+				var searchTargetStr = $(this).val();
+				console.log(searchTargetStr);
+				location.href="/voting/search?searchTargetStr=" + searchTargetStr; 
+			}
+			
+		});
+		
+		// 투표 항목 선택시 서버에 전송할 준비하기
+		$(".pick_btn").on("click", function() {
+			var selected_pick_input = $(this).prev().clone();
+			var pick_list_wrapper = $(this).closest(".pick_list_wrapper");
+			var submit_pick_wrapper = pick_list_wrapper.next().children(".submit_pick_wrapper");
+			
+			console.log(pick_list_wrapper);
+			
+			// 기존에 있던 input pick 지우기
+			submit_pick_wrapper.html("");
+			
+			// 지금 선택된 요소 넣기
+			submit_pick_wrapper.append(selected_pick_input);
+			
+			// 선택된 요소 버튼 색깔 바꾸고, 나머지는 선택 안됨 색깔로 바꾸기
+			toggleButtonStatus(pick_list_wrapper, $(this));
+		});
+		
+		function toggleButtonStatus(pick_list_wrapper, selected_btn) {
+			
+			pick_list_wrapper.children().each(function(index, item){
+				console.log($(item).children(".pick_btn"));
+				$(item).children(".pick_btn").removeClass("selected-btn");
+			});
+			
+			selected_btn.addClass("selected-btn");
+		}
+		
+		// 투표 참여하기
+		$(".participate_btn").on("click", function(e) {
+			// 로그인 했고, 참여한적이 없으며, 선택한 내용이 있어야 투표를 참여할 수 있도록 하기
+			e.preventDefault();
+			
+			// 로그인이 되어 있는지 체크
+			if ($("#loginId").length == 0) {
+				alert("로그인이 필요한 기능입니다");
+				return;
+			}
+			var submit_pick_wrapper = $(this).parent().prev();
+			var participate_btn = $(this);
+			var pick_list_wrapper = $(this).parent().parent().prev();
+			
+
+			// submit_pick_wrapper에 선택된 내용이 추가되어 있는지 체크
+			var picked_input = submit_pick_wrapper.children();
+			if (picked_input.length == 0) {
+				alert("투표하실 항목을 선택해주세요!");
+				return;
+			}
+			
+			var login_id = $("#loginId").text();
+			var vote_id = $(this).prev().val();
+			var pick_no = picked_input.val();
+			
+			console.log(login_id);
+			console.log(vote_id);
+			console.log(pick_no);
+			
+						
+			$.ajax({
+				url : "/voting/participate",
+				data : {'participant_id' : login_id, 
+						'vote_id' : vote_id,
+						'pick_no' : pick_no},
+				type : "post",
+				dataType : "json",
+				success : function(serverdata) {
+					if (serverdata.result == "fail") {
+						console.log(serverdata.errorMsg);
+						return;
+					}
+					
+					console.log(serverdata);
+					
+					var vote = serverdata.vote;
+					var pickList = vote.pickList;
+					
+					pick_list_wrapper.children(".box").each(function(index, elem){
+						var pickName = pickList[index].pickName;
+						var score = pickList[index].score;
+						$(elem).children(".pick_btn").val(pickName + " - " + score + "표");
+					});
+					
+					participate_btn.attr({"disabled":"disabled"});
+					participate_btn.val("참여 완료");
+				},
+				error : function(e) {
+					console.log(e);
+				}, 
+				complete : function() {
+
+				}
+			});
+			
+		});
 	</script>
 
 </body>

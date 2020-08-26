@@ -23,6 +23,14 @@ public class VoteVO {
 	
 	boolean userLikeStatus;
 	boolean userBookmarkStatus;
+	boolean userParticipated;
+	
+	public boolean isUserParticipated() {
+		return userParticipated;
+	}
+	public void setUserParticipated(boolean userParticipated) {
+		this.userParticipated = userParticipated;
+	}
 	
 	ArrayList<PickVO> pickList;
 	

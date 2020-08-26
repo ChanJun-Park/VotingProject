@@ -1,6 +1,5 @@
 package edu.multi.voting.comments;
 
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,14 +17,12 @@ public class CommentsDAO {
 		System.out.println("commentList 호출됨");
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
-				PreparedStatement pt = con.prepareStatement(sql);
-			) {
+			try (Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote",
+					"vote"); PreparedStatement pt = con.prepareStatement(sql);) {
 				pt.setInt(1, vote_id);
 				ResultSet rs = pt.executeQuery();
-				
-				while(rs.next()) {
+
+				while (rs.next()) {
 					CommentsVO vo = new CommentsVO();
 					vo.setComment_id(rs.getInt("comment_id"));
 					vo.setWriter_id(rs.getString("writer_id"));
@@ -34,24 +31,24 @@ public class CommentsDAO {
 //					vo.setVote_id(vote_id);
 					commentList.add(vo);
 				}
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-		
+		}
+
 		return commentList;
 	}
-	
+
 	public String insertComment(CommentsVO vo) {
-		
+
 		String sql = "insert into comments values(?,sysdate,?,?,0,(select nvl(max(comment_id),0) from comments)+1)";
-		String sql2 = "update vote set comment_count = comment_count + 1 where vote_id =?";
+		String sql2 = "update vote set comment_count = comment_count + 1 where vote_id = ?";
 		String result = "";
-		
+
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
@@ -79,7 +76,7 @@ public class CommentsDAO {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		return result; 
+		return result;
 	}
 	
 	public int deleteComment(CommentsVO vo) {
@@ -104,7 +101,9 @@ public class CommentsDAO {
 				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		} 
+		}
+		
+		
 		return result;
 	}
 
