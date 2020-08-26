@@ -51,59 +51,54 @@ public class CommentsDAO {
 
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
-			PreparedStatement pt = con.prepareStatement(sql);
-			PreparedStatement pt2 = con.prepareStatement(sql2);
-
-			pt.setString(1, vo.getWriter_id());
-			pt.setInt(2, vo.getVote_id());
-			pt.setString(3, vo.getContents());
-
-			int insertRow = pt.executeUpdate();
-			if (insertRow == 1) {
-				result = "성공";
-			} else {
-				result = "오류";
-			}
-			
-			pt.close();
-
-			pt2.setInt(1, vo.vote_id);
-			pt2.executeUpdate();
-			pt2.close();
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+				PreparedStatement pt2 = con.prepareStatement(sql2);
+				pt.setString(1, vo.getWriter_id());
+				pt.setInt(2, vo.getVote_id());
+				pt.setString(3, vo.getContents());
+				
+				int insertRow = pt.executeUpdate();
+				if (insertRow == 1) {
+					result ="성공";
+				} else {
+					result ="오류";
+				}
+				pt.close();
+				
+				pt2.setInt(1, vo.vote_id);
+				pt2.executeUpdate();
+				
+				pt2.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
-
+	
 	public int deleteComment(CommentsVO vo) {
 		String sql = "delete comments where comment_id = ?";
-		String sql2 = "update vote set comment_count = comment_count - 1 where vote_id = ?";
+		String sql2 = "update vote set comment_count = comment_count - 1 where vote_id =?";
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
-			PreparedStatement pt = con.prepareStatement(sql);
-			PreparedStatement pt2 = con.prepareStatement(sql2);
-			
-			pt.setInt(1, vo.comment_id);
-			result = pt.executeUpdate();
-			
-			pt.close();
-			
-			pt2.setInt(1, vo.vote_id);
-			pt2.executeUpdate();
-			
-			pt2.close();
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+				PreparedStatement pt2 = con.prepareStatement(sql2);
 
-		} catch (SQLException e) {
-			e.printStackTrace();
+				pt.setInt(1, vo.comment_id);
+				result = pt.executeUpdate();
+				pt.close();
+				
+				pt2.setInt(1, vo.vote_id);
+				pt2.executeUpdate();
+				pt2.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

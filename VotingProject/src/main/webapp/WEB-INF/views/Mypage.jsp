@@ -85,6 +85,10 @@ tr td:first-child{
 
 <div class="MyVote">
 <hr>
+<c:if test = "${empty myvotes }">
+<h3> 투표함이 비어있어요ㅜ_ㅜ <br> 투표를 만들어주세요!</h3>
+</c:if>
+<c:if test = "${!empty myvotes }">
 <c:forEach var="voteVO" items="${myvotes }">
 		<table>
 		<tr>
@@ -105,6 +109,7 @@ tr td:first-child{
 		<br>
 		<hr>
 </c:forEach>
+</c:if>
 </div>
 <div class="MyFavorite">
 <hr>
