@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,8 +26,6 @@ public class MainPageController {
 	
 	@Autowired
 	private VoteDAO voteDAO;
-	@Autowired
-	private BookmarkDAO bmdao;
 	
 	@Autowired
 	private ParticipateDAO participateDAO;
@@ -38,20 +37,23 @@ public class MainPageController {
 	private BookmarkDAO bookmarkDAO;
 	
 	@RequestMapping(value="/home")
-	public ModelAndView mainPageLoading(HttpServletRequest req) {
+	public ModelAndView mainPageLoading(HttpServletRequest req, @RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo) {
 		ModelAndView mv = new ModelAndView();
 		
 		HttpSession session = req.getSession();
 		String loginId = (String) session.getAttribute("loginId");
 		
 		// 로그인 확인
-		if (loginId != null) {
+		if (loginId == null) {
 			mv.setViewName("redirect:/login");
 			return mv;
 		}
 		
+		// 전체 투표 개수 계산
+		int count = voteDAO.getTotalVoteCount();
+		
 		// vote 리스트 불러오기
-		ArrayList<VoteVO> votes = voteDAO.getEntireVoteList();
+		ArrayList<VoteVO> votes = voteDAO.getEntireVoteList(pageNo);
 		
 		// 각각의 vote에 해당하는 pick 리스트 불러오기
 		for (VoteVO v : votes) {
@@ -68,10 +70,10 @@ public class MainPageController {
 			ArrayList<PickVO> picks = voteDAO.getPickList(v.getVote_id());
 			v.setPickList(picks);
 		}
-		
-		ArrayList<BookmarkVO> bookmarks = bmdao.getBookmark();
+
 		mv.addObject("votes", votes);
-		mv.addObject("bookmarks",bookmarks);
+		mv.addObject("count", count);
+		mv.addObject("pageNo", pageNo);
 		mv.setViewName("MainPage");
 		return mv;
 	}
@@ -101,13 +103,15 @@ public class MainPageController {
 		System.out.println(vote_id);
 		
 		// 보고 싶은 투표 가져오기
-		ArrayList<VoteVO> votes = voteDAO.getVoteWithId(vote_id);
-		// 각각의 vote에 해당하는 pick 리스트 불러오기
-		for (VoteVO v : votes) {
-			System.out.println(v);
-			ArrayList<PickVO> picks = voteDAO.getPickList(v.getVote_id());
-			v.setPickList(picks);
-		}
+		VoteVO v = voteDAO.getVoteWithId(vote_id);
+		// vote에 해당하는 pick 리스트 불러오기
+	
+		System.out.println(v);
+		ArrayList<PickVO> picks = voteDAO.getPickList(v.getVote_id());
+		v.setPickList(picks);
+		
+		ArrayList<VoteVO> votes = new ArrayList<VoteVO>();
+		votes.add(v);
 		mv.addObject("votes", votes);
 		mv.setViewName("MainPage");
 		return mv;

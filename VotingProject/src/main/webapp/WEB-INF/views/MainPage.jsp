@@ -336,13 +336,14 @@ to {
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
-				<img class="btn_good" src="/voting/resources/images/Like.jpg"><span>${voteVO.like_count }</span>
+				<img class="btn_good" src="/voting/resources/images/Like.jpg">
+				<span>${voteVO.like_count }</span>
 				<!-- 준희- 여기!@!@ -->
-				<c:if test=${voteVO.userBookmarkStatus==true }>
+				<c:if test="${voteVO.userBookmarkStatus==true }">
 			    <img class="btn_star" src="/voting/resources/images/Star.png">
 			    </c:if>
-			    <c:if test= ${voteVO.userBookmarkStatus==false }>
-			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.jpg">
+			    <c:if test="${voteVO.userBookmarkStatus==false }">
+			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.png">
 			    </c:if>
 			    <!-- 준희 - 여기까지!@@ -->
 				<img class="btn_comment"
@@ -374,6 +375,10 @@ to {
 		<span class="dot" onclick="currentSlide(3)"></span>
 	</div>
 	<br> <br> <br>
+	
+	<!-- 	이미지 미리 다운로드 해놓기 -->
+	<img class="btn_star" src="/voting/resources/images/Star.png" style="display:none;">
+	<img class ="btn_star" src = "/voting/resources/images/EmpStar.png" style="display:none;">
 	</section>
 	<!-- jQuery 인클루드 -->
 	<script src="/voting/resources/jquery-3.2.1.min.js"></script>
@@ -630,6 +635,8 @@ to {
 			}
 			var submit_pick_wrapper = $(this).parent().prev();
 			var participate_btn = $(this);
+			var pick_list_wrapper = $(this).parent().parent().prev();
+			
 
 			// submit_pick_wrapper에 선택된 내용이 추가되어 있는지 체크
 			var picked_input = submit_pick_wrapper.children();
@@ -659,6 +666,17 @@ to {
 						console.log(serverdata.errorMsg);
 						return;
 					}
+					
+					console.log(serverdata);
+					
+					var vote = serverdata.vote;
+					var pickList = vote.pickList;
+					
+					pick_list_wrapper.children(".box").each(function(index, elem){
+						var pickName = pickList[index].pickName;
+						var score = pickList[index].score;
+						$(elem).children(".pick_btn").val(pickName + " - " + score + "표");
+					});
 					
 					participate_btn.attr({"disabled":"disabled"});
 					participate_btn.val("참여 완료");

@@ -4,12 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.ArrayList;
+import java.sql.SQLException;
 
 import org.springframework.stereotype.Component;
-
-import edu.multi.voting.users.UsersVO;
-import edu.multi.voting.vote.VoteVO;
 
 @Component("bmdao")
 public class BookmarkDAO {

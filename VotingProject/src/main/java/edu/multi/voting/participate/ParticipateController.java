@@ -1,5 +1,7 @@
 package edu.multi.voting.participate;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.multi.voting.pick.PickDAO;
+import edu.multi.voting.pick.PickVO;
+import edu.multi.voting.vote.VoteDAO;
+import edu.multi.voting.vote.VoteVO;
 
 @Controller
 public class ParticipateController {
@@ -24,6 +29,9 @@ public class ParticipateController {
 	@Autowired
 	ParticipateResultVO resultVO;
 	
+	@Autowired
+	VoteDAO voteDAO;
+	
 	@RequestMapping(value="/participate", method=RequestMethod.POST)
 	@ResponseBody
 	public ParticipateResultVO participate(ParticipateVO pvo) {
@@ -39,6 +47,12 @@ public class ParticipateController {
 			pickDAO.countPick(pvo.getVote_id(), pvo.getPick_no());
 			participateDAO.insertParticipate(pvo);
 			
+			VoteVO voteVO = voteDAO.getVoteWithId(pvo.getVote_id());
+			System.out.println(voteVO);
+			ArrayList<PickVO> picks = voteDAO.getPickList(voteVO.getVote_id());
+			voteVO.setPickList(picks);
+			
+			resultVO.setVote(voteVO);
 			resultVO.setResult(STATUS_SUCCESS);
 		}	
 		
