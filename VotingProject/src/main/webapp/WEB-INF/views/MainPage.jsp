@@ -337,7 +337,14 @@ to {
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
 				<img class="btn_good" src="/voting/resources/images/Like.jpg"><span>${voteVO.like_count }</span>
-				<img class="btn_star" src="/voting/resources/images/Star.png">
+				<!-- 준희- 여기!@!@ -->
+				<c:if test=${voteVO.userBookmarkStatus==true }>
+			    <img class="btn_star" src="/voting/resources/images/Star.png">
+			    </c:if>
+			    <c:if test= ${voteVO.userBookmarkStatus==false }>
+			    <img class ="btn_star" src = "/voting/resources/images/EmpStar.jpg">
+			    </c:if>
+			    <!-- 준희 - 여기까지!@@ -->
 				<img class="btn_comment"
 					src="/voting/resources/images/Comment.png"><span>${voteVO.comment_count }</span>
 			</div>

@@ -15,6 +15,7 @@ import edu.multi.voting.bookmark.BookmarkDAO;
 import edu.multi.voting.likevote.LikeVoteDAO;
 import edu.multi.voting.participate.ParticipateDAO;
 import edu.multi.voting.participate.ParticipateVO;
+import edu.multi.voting.bookmark.BookmarkVO;
 import edu.multi.voting.pick.PickVO;
 import edu.multi.voting.vote.VoteDAO;
 import edu.multi.voting.vote.VoteVO;
@@ -24,6 +25,8 @@ public class MainPageController {
 	
 	@Autowired
 	private VoteDAO voteDAO;
+	@Autowired
+	private BookmarkDAO bmdao;
 	
 	@Autowired
 	private ParticipateDAO participateDAO;
@@ -65,7 +68,10 @@ public class MainPageController {
 			ArrayList<PickVO> picks = voteDAO.getPickList(v.getVote_id());
 			v.setPickList(picks);
 		}
+		
+		ArrayList<BookmarkVO> bookmarks = bmdao.getBookmark();
 		mv.addObject("votes", votes);
+		mv.addObject("bookmarks",bookmarks);
 		mv.setViewName("MainPage");
 		return mv;
 	}
