@@ -337,7 +337,7 @@ to {
 			         <div class="box">
 						<c:choose>
 							<c:when test="${voteVO.userParticipated == true }">
-								<input class="btn participate_btn" type=submit value="참여완료" disabled />
+								<input class="btn log participate_btn" type=submit value="참여완료" disabled />
 							</c:when>
 							<c:otherwise>
 								<input type=hidden name="voteid" value="${voteVO.vote_id }"/>
