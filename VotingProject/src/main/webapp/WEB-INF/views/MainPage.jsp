@@ -328,6 +328,7 @@ to {
 
 		</article>
 	</c:forEach>
+	
 	<div style="text-align: center">
 		<span class="dot" onclick="currentSlide(1)"></span> 
 		<span class="dot" onclick="currentSlide(2)"></span>
@@ -339,6 +340,7 @@ to {
 	<script src="/voting/resources/jquery-3.2.1.min.js"></script>
 	<!-- 페이지 넘기기 -->
 	<script>
+	
 		var slideIndex = 1;
 		showSlides(slideIndex);
 		function currentSlide(n) {
@@ -459,15 +461,16 @@ to {
 		
 		
 		$(".comment-content").on('click',".del_btn",function(){
-			console.log("삭제 버튼 눌림");
+// 			console.log("삭제 버튼 눌림");
 			var comment_id = $(this).prev().val();
 			var deleteTarget = $(this).parent();
 			var deleteTarget2 = $(this).parent().next();
+			var vote_id = $(this).parent().parent().prev().prev().prev().prev().children().next().val();
 			
 			console.log(comment_id);
 			$.ajax({
 				url : "/voting/commentdelete",
-				data : {'comment_id' : comment_id},
+				data : {'comment_id' : comment_id, 'vote_id' : vote_id},
 				type : "post",
 				dataType : "json",
 				success : function(serverdata){
@@ -485,6 +488,10 @@ to {
 		
 		$(".close").on("click",function() {	
 			$(this).parent().parent().css({"display" : "none"});
+			window.setTimeout(function(){
+				window.location.reload()
+			},1)
+			
 		});
 		$(".comment").on("click", ".close", function() {
 			$(this).parent().parent().css({

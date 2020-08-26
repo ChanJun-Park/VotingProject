@@ -118,6 +118,14 @@ public class VoteVO {
 				+ ", content2=" + content2 + ", content3=" + content3 + ", content4=" + content4 + ", time=" + time
 				+ ", like_count=" + like_count + ", comment_count=" + comment_count + "]";
 	}
+	public void setStartIndex(int startIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void setCntPerPage(int pageSize) {
+		// TODO Auto-generated method stub
+		
+	}
 
 	
 	

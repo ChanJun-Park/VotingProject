@@ -361,5 +361,23 @@ public class VoteDAO {
 
 		return votes;
 	}
+	public int selectVoteListCnt(VoteVO voteVO) {
+		String sql = "select count(*) as cnt from vote";
+		int cnt = 0;
+		try {
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				PreparedStatement pt = con.prepareStatement(sql);
+	
+				ResultSet rs = pt.executeQuery();
+				cnt = rs.getInt("cnt");
+			} catch (SQLException e) {
+				e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} 
+
+		return cnt;
+	}
 	
 }
