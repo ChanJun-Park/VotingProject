@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,11 +19,15 @@ public class MainPageController {
 	private VoteDAO voteDAO;
 	
 	@RequestMapping(value="/home")
-	public ModelAndView mainPageLoading() {
+	public ModelAndView mainPageLoading(@RequestParam(value = "pageNo", required = true, defaultValue = "1") int pageNo) {
 		ModelAndView mv = new ModelAndView();
 		System.out.println("test");
+		System.out.println("page number : "+pageNo);
 		// vote 리스트 불러오기
-		ArrayList<VoteVO> votes = voteDAO.getEntireVoteList();
+		ArrayList<VoteVO> votes = voteDAO.getEntireVoteList(pageNo);
+		
+		int count = voteDAO.getTotalVoteCount();
+		
 		// 각각의 vote에 해당하는 pick 리스트 불러오기
 		for (VoteVO v : votes) {
 			System.out.println(v);
@@ -32,6 +35,8 @@ public class MainPageController {
 			v.setPickList(picks);
 		}
 		mv.addObject("votes", votes);
+		mv.addObject("count", count);
+		mv.addObject("pageNo", pageNo);
 		mv.setViewName("MainPage");
 		return mv;
 	}

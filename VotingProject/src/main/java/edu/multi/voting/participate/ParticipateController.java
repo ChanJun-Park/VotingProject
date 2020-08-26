@@ -47,4 +47,26 @@ public class ParticipateController {
 		
 		return resultVO;
 	}
+	@RequestMapping(value="/check_participation")
+	@ResponseBody
+	public ParticipateResultVO check_participation(String user_id, ParticipateVO pvo) {
+		
+		// 이미 참여한 적이 있는지 체크
+//		if (participateDAO.isExist(pvo)) {
+//			resultVO.setResult(STATUS_FAIL);
+//			resultVO.setErrorMsg(EXIST_ERROR_MSG);
+//		} 
+//		else {	// 참여한 적이 없다면
+//			pickDAO.increasePickScore(pvo.getVote_id(), pvo.getPick_no());
+//			participateDAO.insertParticipate(pvo.getParticipant_id(), pvo.getVote_id(), pvo.getPick_no());
+//			
+//			resultVO.setResult(STATUS_SUCCESS);
+//		}
+		
+		// test
+		resultVO.setResult(STATUS_SUCCESS);
+		
+		return resultVO;
+	}
+	
 }

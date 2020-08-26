@@ -160,37 +160,54 @@ public class VoteDAO {
 		return;
 	}
 
-	public ArrayList<VoteVO> getEntireVoteList() {
-		String sql = "select * from vote";
-		ArrayList<VoteVO> votes = new ArrayList<VoteVO>();
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
-				PreparedStatement pt = con.prepareStatement(sql);
-			) {
+	public ArrayList<VoteVO> getEntireVoteList(int pageNo) {
+	      String sql = "SELECT * FROM (" + 
+	              "    SELECT a.*, rownum r" + 
+	              "    FROM " + 
+	              "    (" + 
+	              "        select ROWNUM as \"seq\", vote_id, poster_id, title, contents, time, like_count, comment_count " + 
+	              "        from vote " + 
+	              "        order by time desc " + 
+	              "    ) a " + 
+	              "    WHERE rownum <= ? " + 
+	              " ) " + 
+	              " WHERE r >= ? ";
 
-				ResultSet rs = pt.executeQuery();
-				while(rs.next()) {
-					VoteVO vo = new VoteVO();
-					vo.setVote_id(rs.getInt("vote_id"));
-					vo.setPoster_id(rs.getString("poster_id"));
-					vo.setTitle(rs.getString("title"));
-					vo.setContents(rs.getString("contents"));
-					vo.setTime(rs.getDate("time"));
-					vo.setLike_count(rs.getInt("like_count"));
-					vo.setComment_count(rs.getInt("comment_count"));
-					votes.add(vo);
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} 
+	      ArrayList<VoteVO> votes = new ArrayList<VoteVO>();
+	      try {
+	         Class.forName("oracle.jdbc.driver.OracleDriver");
+	         try (
+	            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+	            PreparedStatement pt = con.prepareStatement(sql);
+	         ) {
 
-		return votes;
-	}
+	            int start = (pageNo - 1) * 5 + 1;
+	            int end = start + 4;
+	            
+	            pt.setInt(1, end);
+	            pt.setInt(2, start);
+	            
+	            ResultSet rs = pt.executeQuery();
+	            while(rs.next()) {
+	               VoteVO vo = new VoteVO();
+	               vo.setVote_id(rs.getInt("vote_id"));
+	               vo.setPoster_id(rs.getString("poster_id"));
+	               vo.setTitle(rs.getString("title"));
+	               vo.setContents(rs.getString("contents"));
+	               vo.setTime(rs.getDate("time"));
+	               vo.setLike_count(rs.getInt("like_count"));
+	               vo.setComment_count(rs.getInt("comment_count"));
+	               votes.add(vo);
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	         }
+	      } catch (ClassNotFoundException e) {
+	         e.printStackTrace();
+	      } 
+
+	      return votes;
+	   }
 
 	public ArrayList<PickVO> getPickList(int vote_id) {
 		String sql = "select * from pick where vote_id = ?";
@@ -431,5 +448,29 @@ public class VoteDAO {
 		
 		return result;
 	}
+	
+	  public int getTotalVoteCount() {
+	      String sql = "select count(*) as \"count\" from vote";
+	      int result = 0;
+	      try {
+	         Class.forName("oracle.jdbc.driver.OracleDriver");
+	         try (
+	            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+	            PreparedStatement pt = con.prepareStatement(sql);
+	         ) {
+	            ResultSet rs = pt.executeQuery();
+	            
+	            if (rs.next()) {
+	               result = rs.getInt("count");
+	            }
+	         } catch (SQLException e) {
+	            e.printStackTrace();
+	         }
+	      } catch (ClassNotFoundException e) {
+	         e.printStackTrace();
+	      } 
+
+	      return result;
+	   }
 	
 }

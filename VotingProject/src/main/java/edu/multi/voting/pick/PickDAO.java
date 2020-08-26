@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class PickDAO {
 	public void countPick(PickVO vo) {
 		String sql = "update pick set score = score + 1 where vote_id = ? and pick_no = ? ";

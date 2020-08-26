@@ -13,11 +13,13 @@ table {
 	width:75%;
 	}
 .td1{text-align: left;}
-.td2{width:72%; text-align: center;}
+.td2{width:56%; text-align: center;}
 .td3{width:7%; text-align: right;}
-.td4{width:7%; text-align: right;}
-.td5{
+.td4{width:7%; text-align: center;}
+.td5{width:8%; text-align: right;}
+.td6{
 	text-align: center;
+	padding-left:130px;
 	color: gray;
 }
 
@@ -29,7 +31,7 @@ input[name=search] {
 	border-radius: 4px;
 	font-size: 12px;
 	background-color: white;
-	background-image: url('/VotingProject/resources/images/Search.png');
+	background-image: url('/voting/resources/images/Search.png');
 	background-position: 10px 3px;
 	background-repeat: no-repeat;
 	background-size: 14px 14px;
@@ -162,16 +164,13 @@ body {
 	padding: 8px 20px 15px 20px;
 	font-size: 16px;
 	font-weight: 290;
+	outline:0;
 }
 
 .log {
 	background-color: #ff9800;
 	width: 35%;
 	height: 45px;
-}
-
-.log:hover {
-	background: #e68a00;
 }
 
 .selected-btn {
@@ -191,6 +190,14 @@ body {
 .box {
 	text-align: center;
 }
+/*  참여하기 버튼 */
+.participate_btn{
+	background-color: gray;
+}
+.participate_btn:hover{
+	background-color: #d3d3d3;
+}
+
 
 /* 페이지 번호*/
 .numbertext {
@@ -266,19 +273,23 @@ to {
 		<td class="td1"><input id="votesearch" type="text" name="search" placeholder="Search.."></td>
 		<td class="td2"><h1><a href="/voting/home" class='no_a_deco'><b>VOTE</b></a></h1></td>
 		<td class="td3">
-			<form action="/voting/addvote"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33" height="33" style="padding-top:1px;"/></form>&nbsp;
+			<form action="/voting/addvote"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33" height="33" style="padding-top:1px;"/></form>
+		</td>			
+		<td class="td4">
 			<form action="/voting/mypage" method="post"><input type=image src="/voting/resources/images/Mypage.png" name="Submit" value="Submit" width="30" height="30" style=" padding-bottom:2px;"/></form>
+		</td>
+		<td class="td5">
 			<c:if test="${empty sessionScope.loginId}">
 				<span><a href="/voting/login/" class="no_a_deco">로그인</a></span>
 			</c:if>
 			<c:if test="${not empty sessionScope.loginId}">
-				<span id="loginId">${sessionScope.loginId}</span>
+				<span id="loginId">${sessionScope.loginId}</span><br>
 				<span><a href="/voting/loout/" class="no_a_deco">로그아웃</a></span>
 			</c:if>
 		</td>
 	</tr>
 	<tr>
-		<td colspan="3" class="td4"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td>
+		<td colspan="3" class="td6"><h4>당신의 선택은?? 투표를 해주세요 :) </h4></td>
 	</tr>
 	</table>
 </header>
@@ -286,12 +297,15 @@ to {
 <br>
 <br>
 <br>
+<input id = "total_vote" type =hidden value="${count }"/>
+<input id = "slide_idx" type =hidden value="${pageNo }"/>
 <div class="slideshow-container">
-  <div class="mySlides fade">
-  
+  <div class="mySlides fade" style="display:block;">
+ 
     <div class="numbertext">1 / 3</div>
 	<c:forEach var="voteVO" items="${votes }">
-		<article class="new_vote" id="vote${voteVO.vote_id }">
+ 		<input type=hidden value="${voteVO.vote_id }" class="miffy"/>
+		<article class="new_vote" id="miffy">
 			<br>
 			<h2 class="q">${voteVO.title }</h2>
 			<p class="q">${voteVO.contents }</p>
@@ -300,7 +314,8 @@ to {
 			         <c:forEach var="pickVO" items="${voteVO.pickList }">
 			            <div class="box">
 			               <input type=hidden name="pickNo" value="${pickVO.pickNo }"/>
-			               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />               
+			               <input class="btn log pick_btn" type=button value="${pickVO.pickName }" />   
+			               <div class="display_result"></div>            
 			            </div>
 			         </c:forEach>
 				 </div>
@@ -311,11 +326,10 @@ to {
 					 </div>
 			         <div class="box">
 			         	<input type=hidden name="voteid" value="${voteVO.vote_id }"/>		       
-			            <input class="btn participate_btn" type=submit value="참여하기" />
+			            <input class="btn log participate_btn" type=submit value="참여하기" />
 			         </div>
 		         </form>
 			</div>
-			</form>
 
 			<div class="box_ex">
 				<input type="hidden" name="vote_id" value="${voteVO.vote_id }" />
@@ -345,48 +359,45 @@ to {
 	</c:forEach>
 </div>
 </div>
-	<div style="text-align: center">
-		<span class="dot" onclick="currentSlide(1)"></span> 
-		<span class="dot" onclick="currentSlide(2)"></span>
-		<span class="dot" onclick="currentSlide(3)"></span>
+	<div id="dots" style="text-align: center">
 	</div>
 	<br> <br> <br>
 	</section>
 	<!-- jQuery 인클루드 -->
 	<script src="/voting/resources/jquery-3.2.1.min.js"></script>
-	<!-- 페이지 넘기기 -->
 	<script>
-		var slideIndex = 1;
-		showSlides(slideIndex);
-		function currentSlide(n) {
-			showSlides(slideIndex = n);
+	<!-- dot 생성 -->
+	var vote_id = $("#miffy").prev().val();
+	var count_vote = $("#total_vote").val();
+		
+	var slide_idx = $("#slide_idx").val();
+	
+	var count_dot= Math.ceil(count_vote/5);
+	
+	for (var i = 0; i < count_dot; i++) {
+		$("#dots").append("<span class=\"dot\" onclick=\"showSlides("+(i+1)+")\"></span>");
+	}
+	
+	
+		/* 목록 넣기 */
+		var slideIndex = slide_idx;
+	
+		var dots = document.getElementsByClassName("dot");
+		for (i = 0; i < dots.length; i++) {
+				dots[i].className = dots[i].className.replace("active", "");
 		}
+		dots[slideIndex-1].className += " active"; 
+		
 		function showSlides(n) {
-			var i;
-			var slides = document.getElementsByClassName("mySlides");
-			var dots = document.getElementsByClassName("dot");
-			if (n > slides.length) {
-				slideIndex = 1
-			}
-			if (n < 1) {
-				slideIndex = slides.length
-			}
-			for (i = 0; i < slides.length; i++) {
-				slides[i].style.display = "none";
-			}
-			for (i = 0; i < dots.length; i++) {
-				dots[i].className = dots[i].className.replace(" active", "");
-			}
-			slides[slideIndex - 1].style.display = "block";
-			dots[slideIndex - 1].className += " active";
+			location.href="/voting/home?pageNo="+n;
+			
 		}
-	</script>
+	
+	
+	</script>	
 	<!-- 댓글창 띄우기 -->
 	<script>
-		;
-// 		var comment_form = "<p><span style=\"font-size:16px;font-weight: bold;padding-bottom: 10px;\"></span><br>"
-// 				+ "<br><span style=\"color:gray;font-size:10px;\"></span></p><hr>";
-
+	
 		var com = document.getElementById('${voteVO.vote_id }');
 		var btn = document.getElementById("btn_comment");
 
