@@ -651,7 +651,7 @@ to {
 				return;
 			}
 			var login_id = $("#loginId").text();
-			var vote_id = $(this).prev().prev().val();
+			var vote_id = $(this).prev().val();
 			var like_count_target = $(this).next();
 			var like_button = $(this);
 			
