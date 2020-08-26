@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class PickController {
-	@Autowired
-	private PickDAO dao;
-	
-	@RequestMapping(value="/pick",method=RequestMethod.POST)
-	public String pick(PickVO vo){
-		System.out.println(vo.getPickNo()+" "+vo.getVoteId());
-		dao.countPick(vo);
-		return "redirect:/home";
-	}
+   @Autowired
+   private PickDAO dao;
+   
+   // -> ParticipateController 로?
+   @RequestMapping(value="/pick",method=RequestMethod.POST)
+   public String pick(PickVO vo){
+      dao.countPick(vo);
+      return "redirect:/home";
+   }
 }

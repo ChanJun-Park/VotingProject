@@ -33,6 +33,7 @@ public class VoteController {
 		HttpSession session = req.getSession();
 		String loginId = (String) session.getAttribute("loginId");
 		vo.setPoster_id(loginId);
+		System.out.println(vo);
 		int voteid = dao.insertVote(vo);
 		System.out.println("voteid 는 "+voteid);
 		dao.insertPicks(vo, voteid);
@@ -64,16 +65,21 @@ public class VoteController {
 		return "redirect:/home";
 	}
 	
-//	@RequestMapping(value="/likevote", method=RequestMethod.POST)
-//	@ResponseBody
-//	public String likevote(String login_id, int vote_id) {
-//		// 이미 좋아요 눌린적이 있다면
-//		if (dao.checkVoteLike(login_id, vote_id)) {
-//			dao.decreaseVoteLike(vote_id);
-//			likeVoteDao.deleteVoteLike(login_id, vote_id);
-//		} else { // 좋아요 눌린적이 없다면
-//			dao.increaseVoteLike(vote_id);
-//			likeVoteDao.insertVoteLike(login_id, vote_id);
-//		}
-//	}
+	@RequestMapping(value="/likevote", method=RequestMethod.POST)
+	@ResponseBody
+	public String likevote(String login_id, int vote_id) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{\"result\":");
+		// 이미 좋아요 눌린적이 있다면
+		if (dao.isExistVoteLike(login_id, vote_id)) {
+			dao.decreaseVoteLike(vote_id);
+			likeVoteDao.deleteVoteLike(login_id, vote_id);
+			sb.append("\"unheart\"}");
+		} else { // 좋아요 눌린적이 없다면
+			dao.increaseVoteLike(vote_id);
+			likeVoteDao.insertVoteLike(login_id, vote_id);
+			sb.append("\"heart\"}");
+		}
+		return sb.toString();
+	}
 }
