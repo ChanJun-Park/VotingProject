@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.VotingConstant;
+
 @Component("lvdao")
 public class LikeVoteDAO {
 	public String findVoteLike(String login_id, int vote_id) {
@@ -18,7 +20,7 @@ public class LikeVoteDAO {
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+					VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 	
 			PreparedStatement pt = con.prepareStatement(sql);
 	
@@ -52,25 +54,19 @@ public class LikeVoteDAO {
 
 	public int deleteVoteLike(String login_id, int vote_id) {
 		String sql = "delete likevote where user_id=? and vote_id=?";
-		String sql2 = "update vote set like_count = like_count-1 where vote_id =?";
+		
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
-				PreparedStatement pt2 = con.prepareStatement(sql2);
 
 				System.out.println(vote_id);
 				pt.setString(1, login_id);
 				pt.setInt(2, vote_id);
 				result = pt.executeUpdate();
-				
-				pt2.setInt(1, vote_id);
-				pt2.executeUpdate();
 			
 				pt.close();
-				pt2.close();
-				
 			} catch (SQLException e) {
 				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -86,7 +82,7 @@ public class LikeVoteDAO {
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			
 				pt.setString(1, login_id);
@@ -118,7 +114,7 @@ public class LikeVoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 

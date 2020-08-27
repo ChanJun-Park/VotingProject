@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.VotingConstant;
+
 @Component("user_dao")
 public class UsersDAO {
 	
@@ -18,7 +20,7 @@ public class UsersDAO {
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+					VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setString(1, vo.getUser_id());
 			pt.setString(2, vo.getNickname());
@@ -46,7 +48,7 @@ public class UsersDAO {
 
 				Class.forName("oracle.jdbc.driver.OracleDriver");
 				Connection con = DriverManager.getConnection(
-						"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+						VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 				pt.setString(1, user.getUser_id());
 				pt.executeUpdate();
@@ -70,7 +72,7 @@ public class UsersDAO {
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+					VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setString(1, user_id);
 			ResultSet rs = pt.executeQuery();
@@ -104,7 +106,7 @@ public class UsersDAO {
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+					VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setString(1, idoremail);
 			ResultSet rs = pt.executeQuery();

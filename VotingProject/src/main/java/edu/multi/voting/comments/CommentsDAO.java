@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.VotingConstant;
+
 @Component
 public class CommentsDAO {
 	public ArrayList<CommentsVO> getCommentList(int vote_id) {
@@ -17,7 +19,7 @@ public class CommentsDAO {
 		System.out.println("commentList 호출됨");
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			try (Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote",
+			try (Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote",
 					"vote"); PreparedStatement pt = con.prepareStatement(sql);) {
 				pt.setInt(1, vote_id);
 				ResultSet rs = pt.executeQuery();
@@ -51,7 +53,7 @@ public class CommentsDAO {
 
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 				PreparedStatement pt2 = con.prepareStatement(sql2);
 				pt.setString(1, vo.getWriter_id());
@@ -85,7 +87,7 @@ public class CommentsDAO {
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 				PreparedStatement pt2 = con.prepareStatement(sql2);
 
@@ -113,7 +115,7 @@ public class CommentsDAO {
 //		try {
 //			Class.forName("oracle.jdbc.driver.OracleDriver");
 //			try (
-//				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+//				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 //				PreparedStatement pt = con.prepareStatement(sql);
 //			) {
 //				pt.setInt(1, comment_id);
