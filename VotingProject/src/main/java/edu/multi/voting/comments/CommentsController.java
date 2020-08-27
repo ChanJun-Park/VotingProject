@@ -28,10 +28,8 @@ public class CommentsController {
 		System.out.println(vo);
 		
 		String result = dao.insertComment(vo);
+		vo.setTime(result);
 		
-//		vo = dao.selectComment(vo.comment_id);
-		if (result.indexOf("성공")<0) {
-		}
 		return vo;
 	}
 	

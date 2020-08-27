@@ -49,7 +49,6 @@
 <div class="slideshow-container">
   <div class="mySlides fade" style="display:block;">
  
-    <div class="numbertext">1 / 3</div>
 	<c:forEach var="voteVO" items="${votes }">
  		<input type=hidden value="${voteVO.vote_id }" class="miffy"/>
 		<article class="new_vote" id="miffy">
@@ -84,7 +83,7 @@
 			         <div class="box">
 						<c:choose>
 							<c:when test="${voteVO.userParticipated == true }">
-								<input class="btn log participate_btn" type=submit value="참여완료" disabled />
+								<input class="btn log participate_btn p_complete_btn" type=submit value="참여완료" disabled />
 							</c:when>
 							<c:otherwise>
 								<input type=hidden name="voteid" value="${voteVO.vote_id }"/>
@@ -137,15 +136,15 @@
 	</c:forEach>
 </div>
 </div>
-	<div id="dots" style="text-align: center">
-	</div>
-	<br> <br> <br>
-	<!-- 	이미지 미리 다운로드 해놓기 -->
-	<img class="btn_star" src="/voting/resources/images/Star.png" style="display:none;">
-	<img class ="btn_star" src = "/voting/resources/images/EmpStar.png" style="display:none;">
-	</section>
-	<!-- jQuery 인클루드 -->
-	<script src="/voting/resources/jquery-3.2.1.min.js"></script>
-	<script src="/voting/resources/js/voting.js"></script>
+<div id="dots" style="text-align: center">
+</div>
+<br> <br> <br>
+<!-- 	이미지 미리 다운로드 해놓기 -->
+<img class="btn_star" src="/voting/resources/images/Star.png" style="display:none;">
+<img class ="btn_star" src = "/voting/resources/images/EmpStar.png" style="display:none;">
+</section>
+<!-- jQuery 인클루드 -->
+<script src="/voting/resources/jquery-3.2.1.min.js"></script>
+<script src="/voting/resources/js/voting.js"></script>
 </body>
 </html>

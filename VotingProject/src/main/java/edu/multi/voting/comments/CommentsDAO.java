@@ -5,14 +5,21 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import edu.multi.voting.VotingConstant;
 
 @Component
 public class CommentsDAO {
+	
+	@Autowired
+	SimpleDateFormat dateFormat;
+	
 	public ArrayList<CommentsVO> getCommentList(int vote_id) {
 		ArrayList<CommentsVO> commentList = new ArrayList<CommentsVO>();
 		String sql = "select comment_id, writer_id, contents, time from comments where vote_id =? order by time desc";
@@ -44,13 +51,45 @@ public class CommentsDAO {
 
 		return commentList;
 	}
+	
+	public CommentsVO getCommentWithId(int comment_id) {
+		CommentsVO comment = null;
+		String sql = "select comment_id, writer_id, contents, time from comments where comment_id =?";
+		
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			try (Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote",
+					"vote"); PreparedStatement pt = con.prepareStatement(sql);) {
+				pt.setInt(1, comment_id);
+				ResultSet rs = pt.executeQuery();
+
+				if (rs.next()) {
+					comment = new CommentsVO();
+					comment.setComment_id(rs.getInt("comment_id"));
+					comment.setWriter_id(rs.getString("writer_id"));
+					comment.setContents(rs.getString("contents"));
+					comment.setTime(rs.getString("time"));
+				}
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return comment;
+	}
 
 	public String insertComment(CommentsVO vo) {
 
 		String sql = "insert into comments values(?,sysdate,?,?,0,(select nvl(max(comment_id),0) from comments)+1)";
 		String sql2 = "update vote set comment_count = comment_count + 1 where vote_id = ?";
+		Calendar time = Calendar.getInstance();
+		String serverDate = dateFormat.format(time.getTime());
 		String result = "";
-
+		System.out.println(serverDate);
+		
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
@@ -62,7 +101,7 @@ public class CommentsDAO {
 				
 				int insertRow = pt.executeUpdate();
 				if (insertRow == 1) {
-					result ="성공";
+					result = serverDate;
 				} else {
 					result ="오류";
 				}
@@ -70,7 +109,6 @@ public class CommentsDAO {
 				
 				pt2.setInt(1, vo.vote_id);
 				pt2.executeUpdate();
-				
 				pt2.close();
 				
 			} catch (SQLException e) {
