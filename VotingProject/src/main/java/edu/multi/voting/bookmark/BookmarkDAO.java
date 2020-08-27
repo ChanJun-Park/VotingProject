@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.VotingConstant;
+
 @Component("bmdao")
 public class BookmarkDAO {
 	public boolean isExist(String loginId, int vote_id) {
@@ -17,7 +19,7 @@ public class BookmarkDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -50,7 +52,7 @@ public class BookmarkDAO {
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+					VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setInt(1, vote_id);
 			pt.setString(2, bookmarker_id);
@@ -75,7 +77,7 @@ public class BookmarkDAO {
 
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			Connection con = DriverManager.getConnection(
-					"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+					VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setString(1, vo.getBookmarker_id());
 			pt.setInt(2, vo.getVote_id());
@@ -110,7 +112,7 @@ public class BookmarkDAO {
 
 				Class.forName("oracle.jdbc.driver.OracleDriver");
 				Connection con = DriverManager.getConnection(
-						"jdbc:oracle:thin:@70.12.231.100:1521:xe","vote","vote");
+						VotingConstant.JDBC_CONNECTION_STR,"vote","vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 
 				pt.setInt(1, vo.getVote_id());

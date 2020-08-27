@@ -3,13 +3,13 @@ package edu.multi.voting.vote;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.VotingConstant;
 import edu.multi.voting.pick.PickVO;
 
 @Component("dao")
@@ -20,7 +20,7 @@ public class VoteDAO {
 			String sql = "insert into vote values((select nvl(max(vote_id), 0) + 1 from vote), ? , ?, ?, sysdate,0, 0)";
 			String sql2 = "select max(vote_id) as voteid from vote";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			PreparedStatement pt2 = con.prepareStatement(sql2);
 			
@@ -49,7 +49,7 @@ public class VoteDAO {
 			String sql3 = "insert into pick values(?, 3, ?, 0)";
 			String sql4 = "insert into pick values(?, 4, ?, 0)";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt1 = con.prepareStatement(sql1);
 			PreparedStatement pt2 = con.prepareStatement(sql2);
 			PreparedStatement pt3 = con.prepareStatement(sql3);
@@ -97,7 +97,7 @@ public class VoteDAO {
 		try {
 			String sql = "delete from vote where vote_id = ?";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setInt(1, vote_id);
 			
@@ -113,7 +113,7 @@ public class VoteDAO {
 		try {
 			String sql = "delete from pick where vote_id = ?";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setInt(1, vote_id);
 			
@@ -130,7 +130,7 @@ public class VoteDAO {
 		try {
 			String sql = "delete from bookmark where vote_id = ?";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setInt(1, vote_id);
 			
@@ -147,7 +147,7 @@ public class VoteDAO {
 		try {
 			String sql = "update vote set like_count = like_count + 1 where vote_id = ?";
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			pt.setInt(1, vo.getVote_id());
 			
@@ -177,7 +177,7 @@ public class VoteDAO {
 	      try {
 	         Class.forName("oracle.jdbc.driver.OracleDriver");
 	         try (
-	            Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+	            Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 	            PreparedStatement pt = con.prepareStatement(sql);
 	         ) {
 
@@ -215,7 +215,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -243,7 +243,7 @@ public class VoteDAO {
 		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 				
 			pt.setString(1, poster_id);	
@@ -275,7 +275,7 @@ public class VoteDAO {
 		ArrayList<VoteVO> picks = new ArrayList<VoteVO>();
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+			Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 			PreparedStatement pt = con.prepareStatement(sql);
 			
 			pt.setString(1, user_id);	
@@ -308,7 +308,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -344,7 +344,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -373,7 +373,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -407,7 +407,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -430,7 +430,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -453,7 +453,7 @@ public class VoteDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 				ResultSet rs = pt.executeQuery();

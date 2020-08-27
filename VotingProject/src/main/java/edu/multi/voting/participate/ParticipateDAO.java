@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import org.springframework.stereotype.Component;
 
+import edu.multi.voting.VotingConstant;
+
 @Component
 public class ParticipateDAO {
 
@@ -18,7 +20,7 @@ public class ParticipateDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
@@ -49,7 +51,7 @@ public class ParticipateDAO {
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			try (
-				Connection con = DriverManager.getConnection("jdbc:oracle:thin:@70.12.231.100:1521:xe", "vote", "vote");
+				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
 			) {
 
