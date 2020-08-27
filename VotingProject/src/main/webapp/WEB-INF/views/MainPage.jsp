@@ -276,7 +276,7 @@ to {
 <table>
 	<tr>
 		<td class="td1"><input id="votesearch" type="text" name="search" placeholder="Search.."></td>
-		<td class="td2"><h1><a href="/voting/home" class='no_a_deco'><b>VOTE</b></a></h1></td>
+		<td class="td2"><h1><a href="/voting/home" class='no_a_deco'><b>VOTE;즐거운참견</b></a></h1></td>
 		<td class="td3">
 			<form action="/voting/addvote"><input type=image src="/voting/resources/images/Create.png" name="Submit" value="Submit" width="33" height="33" style="padding-top:1px;"/></form>
 		</td>			
