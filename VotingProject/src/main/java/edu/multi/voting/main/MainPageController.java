@@ -97,11 +97,15 @@ public class MainPageController {
 			return mv;
 		}
 		
-		// 전체 투표 개수 계산
-		int count = voteDAO.getTotalVoteCount();
 		
 		// 검색된 정보에 대한 vote 리스트 불러오기
 		ArrayList<VoteVO> votes = voteDAO.getSearchedVoteList(searchTargetStr);
+		
+		// 검색된 투표 개수 계산
+		int count = 0;
+		if (votes != null) {
+			count = votes.size(); 			
+		}
 		// 각각의 vote에 해당하는 pick 리스트 불러오기
 		for (VoteVO v : votes) {
 			if (participateDAO.isExist(loginId, v.getVote_id())) {
