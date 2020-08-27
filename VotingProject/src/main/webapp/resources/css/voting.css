@@ -82,6 +82,7 @@ input[name=search] {
 	border: 1px solid #888;
 	width: 60%;
 	height: 80%;
+	overflow: auto;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
 		rgba(0, 0, 0, 0.19);
 	-webkit-animation-name: animatetop;
@@ -162,7 +163,7 @@ body {
 
 .log {
 	background-color: #ff9800;
-	width: 35%;
+	width: 50%;
 	height: 45px;
 }
 
@@ -191,6 +192,10 @@ body {
 	background-color: #d3d3d3;
 }
 
+/* 참여 완료된 버튼 */
+.p_complete_btn {
+	background-color: #d3d3d3;
+}
 
 /* 페이지 번호*/
 .numbertext {
@@ -243,17 +248,17 @@ to {
 	color:black;
 }
 .container {
-    width: 880px;
+    width: 100%;
     height: 400px;
-    overflow: auto;
-  }
-  
- .container::-webkit-scrollbar {
-    width: 10px;
-    background-color: black;
- }
+/*     overflow: auto; */
+}
  
- .del_btn{
- 	width : 100px;
- 	margin-left: 75%;
- }
+.container::-webkit-scrollbar {
+   width: 10px;
+   background-color: black;
+}
+
+.del_btn{
+	width : 100px;
+	margin-left: 75%;
+}

@@ -26,4 +26,8 @@
 	<!-- File upload -->
 	<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 	
+	<beans:bean id="dataFormat" class="java.text.SimpleDateFormat" scope="singleton">
+		<beans:constructor-arg value="yyyy-MM-dd HH:mm:ss"/>
+	</beans:bean>
+	
 </beans:beans>
