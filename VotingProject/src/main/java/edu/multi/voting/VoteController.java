@@ -28,17 +28,22 @@ public class VoteController {
 	public String createPage(){
 		return "CreatePage";
 	}
+	
 	@RequestMapping(value="/addvote", method=RequestMethod.POST)
 	public String mainPage(VoteVO vo, HttpServletRequest req) throws IOException  {
 		HttpSession session = req.getSession();
 		String loginId = (String) session.getAttribute("loginId");
+		
 		vo.setPoster_id(loginId);
 		System.out.println(vo);
+		
 		int voteid = dao.insertVote(vo);
 		System.out.println("voteid 는 "+voteid);
+		
 		dao.insertPicks(vo, voteid);
 		return "redirect:/home";
 	}
+	
 	@RequestMapping(value="/create")
 	public ModelAndView createPage(HttpServletRequest req) throws IOException {
 		
@@ -53,12 +58,14 @@ public class VoteController {
 		}
 		return mv;
 	}
+	
 	@RequestMapping(value="/deleteMyvote",method=RequestMethod.POST)
 	public String deletemyVote(VoteVO vo){
 		dao.deleteVote(vo.getVote_id());
 		dao.deletePicks(vo.getVote_id());
 		return "redirect:/home";
 	}
+	
 	@RequestMapping(value="/deleteFavorite",method=RequestMethod.POST)
 	public String deletemyFavorite(VoteVO vo){
 		dao.deleteFavortie(vo.getVote_id());

@@ -54,25 +54,19 @@ public class LikeVoteDAO {
 
 	public int deleteVoteLike(String login_id, int vote_id) {
 		String sql = "delete likevote where user_id=? and vote_id=?";
-		String sql2 = "update vote set like_count = like_count-1 where vote_id =?";
+		
 		int result = 0;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 				Connection con = DriverManager.getConnection(VotingConstant.JDBC_CONNECTION_STR, "vote", "vote");
 				PreparedStatement pt = con.prepareStatement(sql);
-				PreparedStatement pt2 = con.prepareStatement(sql2);
 
 				System.out.println(vote_id);
 				pt.setString(1, login_id);
 				pt.setInt(2, vote_id);
 				result = pt.executeUpdate();
-				
-				pt2.setInt(1, vote_id);
-				pt2.executeUpdate();
 			
 				pt.close();
-				pt2.close();
-				
 			} catch (SQLException e) {
 				e.printStackTrace();
 		} catch (ClassNotFoundException e) {
